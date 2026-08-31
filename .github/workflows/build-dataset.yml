@@ -1,0 +1,48 @@
+name: Build dataset
+
+# Regenerates assets/dataset.json from OpenDota and commits it.
+# Runs daily and can be triggered manually. GitHub-hosted runners can reach
+# api.opendota.com, so the real dataset is produced here.
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # 06:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Generate dataset from OpenDota
+        env:
+          OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
+        run: npm run build:dataset
+
+      - name: Sanity check output
+        run: |
+          test -s assets/dataset.json
+          node -e "const d=require('./assets/dataset.json'); if(!Array.isArray(d.heroes)||d.heroes.length<50){console.error('dataset looks empty:',d.heroes&&d.heroes.length);process.exit(1)} console.log('heroes:',d.heroes.length,'patch:',d.patch)"
+
+      - name: Commit updated dataset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- assets/dataset.json; then
+            echo "No dataset changes."
+          else
+            git add assets/dataset.json
+            git commit -m "chore(data): refresh OpenDota dataset"
+            git push
+          fi

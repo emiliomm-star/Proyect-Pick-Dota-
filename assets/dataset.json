@@ -1,0 +1,1788 @@
+{
+  "patch": "7.37-sample",
+  "generatedAt": "2026-08-31T14:08:15.194Z",
+  "heroes": [
+    {
+      "id": 1,
+      "name": "npc_dota_hero_antimage",
+      "localizedName": "Anti-Mage",
+      "primaryAttr": "agi",
+      "attackType": "Melee",
+      "roles": [
+        "Carry",
+        "Escape",
+        "Nuker"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/antimage.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/antimage.png"
+    },
+    {
+      "id": 2,
+      "name": "npc_dota_hero_axe",
+      "localizedName": "Axe",
+      "primaryAttr": "str",
+      "attackType": "Melee",
+      "roles": [
+        "Initiator",
+        "Durable",
+        "Disabler",
+        "Carry",
+        "Jungler"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/axe.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/axe.png"
+    },
+    {
+      "id": 5,
+      "name": "npc_dota_hero_crystal_maiden",
+      "localizedName": "Crystal Maiden",
+      "primaryAttr": "int",
+      "attackType": "Ranged",
+      "roles": [
+        "Support",
+        "Disabler",
+        "Nuker",
+        "Jungler"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/crystal_maiden.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/crystal_maiden.png"
+    },
+    {
+      "id": 6,
+      "name": "npc_dota_hero_drow_ranger",
+      "localizedName": "Drow Ranger",
+      "primaryAttr": "agi",
+      "attackType": "Ranged",
+      "roles": [
+        "Carry",
+        "Disabler",
+        "Pusher"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/drow_ranger.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/drow_ranger.png"
+    },
+    {
+      "id": 8,
+      "name": "npc_dota_hero_juggernaut",
+      "localizedName": "Juggernaut",
+      "primaryAttr": "agi",
+      "attackType": "Melee",
+      "roles": [
+        "Carry",
+        "Pusher",
+        "Escape"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/juggernaut.png"
+    },
+    {
+      "id": 11,
+      "name": "npc_dota_hero_nevermore",
+      "localizedName": "Shadow Fiend",
+      "primaryAttr": "agi",
+      "attackType": "Ranged",
+      "roles": [
+        "Carry",
+        "Nuker",
+        "Pusher",
+        "Disabler"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/nevermore.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/nevermore.png"
+    },
+    {
+      "id": 14,
+      "name": "npc_dota_hero_pudge",
+      "localizedName": "Pudge",
+      "primaryAttr": "str",
+      "attackType": "Melee",
+      "roles": [
+        "Disabler",
+        "Initiator",
+        "Durable",
+        "Nuker"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/pudge.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/pudge.png"
+    },
+    {
+      "id": 19,
+      "name": "npc_dota_hero_tiny",
+      "localizedName": "Tiny",
+      "primaryAttr": "str",
+      "attackType": "Melee",
+      "roles": [
+        "Carry",
+        "Nuker",
+        "Pusher",
+        "Initiator",
+        "Durable"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/tiny.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/tiny.png"
+    },
+    {
+      "id": 25,
+      "name": "npc_dota_hero_lina",
+      "localizedName": "Lina",
+      "primaryAttr": "int",
+      "attackType": "Ranged",
+      "roles": [
+        "Support",
+        "Carry",
+        "Nuker",
+        "Disabler"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/lina.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/lina.png"
+    },
+    {
+      "id": 26,
+      "name": "npc_dota_hero_lion",
+      "localizedName": "Lion",
+      "primaryAttr": "int",
+      "attackType": "Ranged",
+      "roles": [
+        "Support",
+        "Disabler",
+        "Nuker",
+        "Initiator"
+      ],
+      "img": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/lion.png",
+      "icon": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/lion.png"
+    }
+  ],
+  "stats": [
+    {
+      "heroId": 1,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 26880
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 19800
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5050
+        }
+      },
+      "proPick": 119,
+      "proWin": 59,
+      "proBan": 79
+    },
+    {
+      "heroId": 2,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 28280
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 20800
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5300
+        }
+      },
+      "proPick": 125,
+      "proWin": 62,
+      "proBan": 83
+    },
+    {
+      "heroId": 5,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 27720
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 20400
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5200
+        }
+      },
+      "proPick": 122,
+      "proWin": 61,
+      "proBan": 82
+    },
+    {
+      "heroId": 6,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 26320
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 19400
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 4950
+        }
+      },
+      "proPick": 116,
+      "proWin": 58,
+      "proBan": 78
+    },
+    {
+      "heroId": 8,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 28000
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 20600
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5250
+        }
+      },
+      "proPick": 124,
+      "proWin": 62,
+      "proBan": 82
+    },
+    {
+      "heroId": 11,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 25760
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 19000
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 4850
+        }
+      },
+      "proPick": 114,
+      "proWin": 57,
+      "proBan": 76
+    },
+    {
+      "heroId": 14,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 27440
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 20200
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5150
+        }
+      },
+      "proPick": 121,
+      "proWin": 61,
+      "proBan": 81
+    },
+    {
+      "heroId": 19,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 27160
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 20000
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5100
+        }
+      },
+      "proPick": 120,
+      "proWin": 60,
+      "proBan": 80
+    },
+    {
+      "heroId": 25,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 26600
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 19600
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5000
+        }
+      },
+      "proPick": 118,
+      "proWin": 59,
+      "proBan": 78
+    },
+    {
+      "heroId": 26,
+      "byBracket": {
+        "herald": {
+          "pick": 56000,
+          "win": 28840
+        },
+        "legend": {
+          "pick": 40000,
+          "win": 21200
+        },
+        "immortal": {
+          "pick": 10000,
+          "win": 5400
+        }
+      },
+      "proPick": 127,
+      "proWin": 64,
+      "proBan": 85
+    }
+  ],
+  "matchups": {
+    "1": [
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 690
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 810
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 675
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 795
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 810
+      }
+    ],
+    "2": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 795
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 735
+      }
+    ],
+    "5": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 690
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 705
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 750
+      }
+    ],
+    "6": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 705
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 795
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 690
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 765
+      }
+    ],
+    "8": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 795
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 795
+      }
+    ],
+    "11": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 705
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 765
+      }
+    ],
+    "14": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 825
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 795
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 765
+      }
+    ],
+    "19": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 795
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 825
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 780
+      }
+    ],
+    "25": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 705
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 26,
+        "gamesPlayed": 1500,
+        "wins": 765
+      }
+    ],
+    "26": [
+      {
+        "heroId": 1,
+        "gamesPlayed": 1500,
+        "wins": 690
+      },
+      {
+        "heroId": 2,
+        "gamesPlayed": 1500,
+        "wins": 780
+      },
+      {
+        "heroId": 5,
+        "gamesPlayed": 1500,
+        "wins": 765
+      },
+      {
+        "heroId": 6,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 8,
+        "gamesPlayed": 1500,
+        "wins": 720
+      },
+      {
+        "heroId": 11,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 14,
+        "gamesPlayed": 1500,
+        "wins": 750
+      },
+      {
+        "heroId": 19,
+        "gamesPlayed": 1500,
+        "wins": 735
+      },
+      {
+        "heroId": 25,
+        "gamesPlayed": 1500,
+        "wins": 750
+      }
+    ]
+  },
+  "itemPopularity": {
+    "1": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5200
+        },
+        {
+          "itemId": 11,
+          "key": "quelling_blade",
+          "count": 4800
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 4300
+        },
+        {
+          "itemId": 20,
+          "key": "circlet",
+          "count": 2100
+        }
+      ],
+      "early": [
+        {
+          "itemId": 63,
+          "key": "power_treads",
+          "count": 6100
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4200
+        },
+        {
+          "itemId": 75,
+          "key": "wraith_band",
+          "count": 3500
+        },
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 2600
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 4100
+        },
+        {
+          "itemId": 137,
+          "key": "manta",
+          "count": 3800
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 3300
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1900
+        }
+      ],
+      "late": [
+        {
+          "itemId": 160,
+          "key": "butterfly",
+          "count": 3200
+        },
+        {
+          "itemId": 154,
+          "key": "satanic",
+          "count": 2900
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 2100
+        }
+      ]
+    },
+    "2": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 4800
+        },
+        {
+          "itemId": 11,
+          "key": "quelling_blade",
+          "count": 3600
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 3400
+        },
+        {
+          "itemId": 39,
+          "key": "flask",
+          "count": 2600
+        }
+      ],
+      "early": [
+        {
+          "itemId": 29,
+          "key": "boots",
+          "count": 5200
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4600
+        },
+        {
+          "itemId": 50,
+          "key": "phase_boots",
+          "count": 3100
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 4400
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 3600
+        },
+        {
+          "itemId": 96,
+          "key": "aghanims_scepter",
+          "count": 2200
+        }
+      ],
+      "late": [
+        {
+          "itemId": 127,
+          "key": "assault",
+          "count": 2600
+        },
+        {
+          "itemId": 108,
+          "key": "shivas_guard",
+          "count": 2300
+        },
+        {
+          "itemId": 154,
+          "key": "satanic",
+          "count": 1700
+        }
+      ]
+    },
+    "5": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5000
+        },
+        {
+          "itemId": 39,
+          "key": "flask",
+          "count": 3900
+        },
+        {
+          "itemId": 42,
+          "key": "ward_observer",
+          "count": 3600
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 3100
+        },
+        {
+          "itemId": 43,
+          "key": "ward_sentry",
+          "count": 2400
+        }
+      ],
+      "early": [
+        {
+          "itemId": 29,
+          "key": "boots",
+          "count": 5400
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4700
+        },
+        {
+          "itemId": 254,
+          "key": "glimmer_cape",
+          "count": 2600
+        },
+        {
+          "itemId": 92,
+          "key": "force_staff",
+          "count": 2100
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 254,
+          "key": "glimmer_cape",
+          "count": 3300
+        },
+        {
+          "itemId": 92,
+          "key": "force_staff",
+          "count": 3000
+        },
+        {
+          "itemId": 65,
+          "key": "aether_lens",
+          "count": 2500
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1800
+        }
+      ],
+      "late": [
+        {
+          "itemId": 96,
+          "key": "aghanims_scepter",
+          "count": 2400
+        },
+        {
+          "itemId": 108,
+          "key": "shivas_guard",
+          "count": 1600
+        }
+      ]
+    },
+    "6": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5200
+        },
+        {
+          "itemId": 11,
+          "key": "quelling_blade",
+          "count": 4800
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 4300
+        },
+        {
+          "itemId": 20,
+          "key": "circlet",
+          "count": 2100
+        }
+      ],
+      "early": [
+        {
+          "itemId": 63,
+          "key": "power_treads",
+          "count": 6100
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4200
+        },
+        {
+          "itemId": 75,
+          "key": "wraith_band",
+          "count": 3500
+        },
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 2600
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 4100
+        },
+        {
+          "itemId": 137,
+          "key": "manta",
+          "count": 3800
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 3300
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1900
+        }
+      ],
+      "late": [
+        {
+          "itemId": 160,
+          "key": "butterfly",
+          "count": 3200
+        },
+        {
+          "itemId": 154,
+          "key": "satanic",
+          "count": 2900
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 2100
+        }
+      ]
+    },
+    "8": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5200
+        },
+        {
+          "itemId": 11,
+          "key": "quelling_blade",
+          "count": 4800
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 4300
+        },
+        {
+          "itemId": 20,
+          "key": "circlet",
+          "count": 2100
+        }
+      ],
+      "early": [
+        {
+          "itemId": 63,
+          "key": "power_treads",
+          "count": 6100
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4200
+        },
+        {
+          "itemId": 75,
+          "key": "wraith_band",
+          "count": 3500
+        },
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 2600
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 4100
+        },
+        {
+          "itemId": 137,
+          "key": "manta",
+          "count": 3800
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 3300
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1900
+        }
+      ],
+      "late": [
+        {
+          "itemId": 160,
+          "key": "butterfly",
+          "count": 3200
+        },
+        {
+          "itemId": 154,
+          "key": "satanic",
+          "count": 2900
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 2100
+        }
+      ]
+    },
+    "11": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5200
+        },
+        {
+          "itemId": 11,
+          "key": "quelling_blade",
+          "count": 4800
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 4300
+        },
+        {
+          "itemId": 20,
+          "key": "circlet",
+          "count": 2100
+        }
+      ],
+      "early": [
+        {
+          "itemId": 63,
+          "key": "power_treads",
+          "count": 6100
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4200
+        },
+        {
+          "itemId": 75,
+          "key": "wraith_band",
+          "count": 3500
+        },
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 2600
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 4100
+        },
+        {
+          "itemId": 137,
+          "key": "manta",
+          "count": 3800
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 3300
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1900
+        }
+      ],
+      "late": [
+        {
+          "itemId": 160,
+          "key": "butterfly",
+          "count": 3200
+        },
+        {
+          "itemId": 154,
+          "key": "satanic",
+          "count": 2900
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 2100
+        }
+      ]
+    },
+    "14": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 4800
+        },
+        {
+          "itemId": 11,
+          "key": "quelling_blade",
+          "count": 3600
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 3400
+        },
+        {
+          "itemId": 39,
+          "key": "flask",
+          "count": 2600
+        }
+      ],
+      "early": [
+        {
+          "itemId": 29,
+          "key": "boots",
+          "count": 5200
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4600
+        },
+        {
+          "itemId": 50,
+          "key": "phase_boots",
+          "count": 3100
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 4400
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 3600
+        },
+        {
+          "itemId": 96,
+          "key": "aghanims_scepter",
+          "count": 2200
+        }
+      ],
+      "late": [
+        {
+          "itemId": 127,
+          "key": "assault",
+          "count": 2600
+        },
+        {
+          "itemId": 108,
+          "key": "shivas_guard",
+          "count": 2300
+        },
+        {
+          "itemId": 154,
+          "key": "satanic",
+          "count": 1700
+        }
+      ]
+    },
+    "19": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5200
+        },
+        {
+          "itemId": 11,
+          "key": "quelling_blade",
+          "count": 4800
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 4300
+        },
+        {
+          "itemId": 20,
+          "key": "circlet",
+          "count": 2100
+        }
+      ],
+      "early": [
+        {
+          "itemId": 63,
+          "key": "power_treads",
+          "count": 6100
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4200
+        },
+        {
+          "itemId": 75,
+          "key": "wraith_band",
+          "count": 3500
+        },
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 2600
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 145,
+          "key": "bfury",
+          "count": 4100
+        },
+        {
+          "itemId": 137,
+          "key": "manta",
+          "count": 3800
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 3300
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1900
+        }
+      ],
+      "late": [
+        {
+          "itemId": 160,
+          "key": "butterfly",
+          "count": 3200
+        },
+        {
+          "itemId": 154,
+          "key": "satanic",
+          "count": 2900
+        },
+        {
+          "itemId": 116,
+          "key": "black_king_bar",
+          "count": 2100
+        }
+      ]
+    },
+    "25": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5000
+        },
+        {
+          "itemId": 39,
+          "key": "flask",
+          "count": 3900
+        },
+        {
+          "itemId": 42,
+          "key": "ward_observer",
+          "count": 3600
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 3100
+        },
+        {
+          "itemId": 43,
+          "key": "ward_sentry",
+          "count": 2400
+        }
+      ],
+      "early": [
+        {
+          "itemId": 29,
+          "key": "boots",
+          "count": 5400
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4700
+        },
+        {
+          "itemId": 254,
+          "key": "glimmer_cape",
+          "count": 2600
+        },
+        {
+          "itemId": 92,
+          "key": "force_staff",
+          "count": 2100
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 254,
+          "key": "glimmer_cape",
+          "count": 3300
+        },
+        {
+          "itemId": 92,
+          "key": "force_staff",
+          "count": 3000
+        },
+        {
+          "itemId": 65,
+          "key": "aether_lens",
+          "count": 2500
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1800
+        }
+      ],
+      "late": [
+        {
+          "itemId": 96,
+          "key": "aghanims_scepter",
+          "count": 2400
+        },
+        {
+          "itemId": 108,
+          "key": "shivas_guard",
+          "count": 1600
+        }
+      ]
+    },
+    "26": {
+      "start": [
+        {
+          "itemId": 40,
+          "key": "tango",
+          "count": 5000
+        },
+        {
+          "itemId": 39,
+          "key": "flask",
+          "count": 3900
+        },
+        {
+          "itemId": 42,
+          "key": "ward_observer",
+          "count": 3600
+        },
+        {
+          "itemId": 16,
+          "key": "branches",
+          "count": 3100
+        },
+        {
+          "itemId": 43,
+          "key": "ward_sentry",
+          "count": 2400
+        }
+      ],
+      "early": [
+        {
+          "itemId": 29,
+          "key": "boots",
+          "count": 5400
+        },
+        {
+          "itemId": 36,
+          "key": "magic_wand",
+          "count": 4700
+        },
+        {
+          "itemId": 254,
+          "key": "glimmer_cape",
+          "count": 2600
+        },
+        {
+          "itemId": 92,
+          "key": "force_staff",
+          "count": 2100
+        }
+      ],
+      "mid": [
+        {
+          "itemId": 254,
+          "key": "glimmer_cape",
+          "count": 3300
+        },
+        {
+          "itemId": 92,
+          "key": "force_staff",
+          "count": 3000
+        },
+        {
+          "itemId": 65,
+          "key": "aether_lens",
+          "count": 2500
+        },
+        {
+          "itemId": 1,
+          "key": "blink",
+          "count": 1800
+        }
+      ],
+      "late": [
+        {
+          "itemId": 96,
+          "key": "aghanims_scepter",
+          "count": 2400
+        },
+        {
+          "itemId": 108,
+          "key": "shivas_guard",
+          "count": 1600
+        }
+      ]
+    }
+  },
+  "itemConstants": {
+    "1": {
+      "id": 1,
+      "key": "blink",
+      "localizedName": "Blink Dagger"
+    },
+    "11": {
+      "id": 11,
+      "key": "quelling_blade",
+      "localizedName": "Quelling Blade"
+    },
+    "16": {
+      "id": 16,
+      "key": "branches",
+      "localizedName": "Iron Branch"
+    },
+    "20": {
+      "id": 20,
+      "key": "circlet",
+      "localizedName": "Circlet"
+    },
+    "29": {
+      "id": 29,
+      "key": "boots",
+      "localizedName": "Boots of Speed"
+    },
+    "36": {
+      "id": 36,
+      "key": "magic_wand",
+      "localizedName": "Magic Wand"
+    },
+    "39": {
+      "id": 39,
+      "key": "flask",
+      "localizedName": "Healing Salve"
+    },
+    "40": {
+      "id": 40,
+      "key": "tango",
+      "localizedName": "Tango"
+    },
+    "42": {
+      "id": 42,
+      "key": "ward_observer",
+      "localizedName": "Observer Ward"
+    },
+    "43": {
+      "id": 43,
+      "key": "ward_sentry",
+      "localizedName": "Sentry Ward"
+    },
+    "50": {
+      "id": 50,
+      "key": "phase_boots",
+      "localizedName": "Phase Boots"
+    },
+    "63": {
+      "id": 63,
+      "key": "power_treads",
+      "localizedName": "Power Treads"
+    },
+    "65": {
+      "id": 65,
+      "key": "aether_lens",
+      "localizedName": "Aether Lens"
+    },
+    "75": {
+      "id": 75,
+      "key": "wraith_band",
+      "localizedName": "Wraith Band"
+    },
+    "92": {
+      "id": 92,
+      "key": "force_staff",
+      "localizedName": "Force Staff"
+    },
+    "96": {
+      "id": 96,
+      "key": "aghanims_scepter",
+      "localizedName": "Aghanim's Scepter"
+    },
+    "108": {
+      "id": 108,
+      "key": "shivas_guard",
+      "localizedName": "Shiva's Guard"
+    },
+    "116": {
+      "id": 116,
+      "key": "black_king_bar",
+      "localizedName": "Black King Bar"
+    },
+    "127": {
+      "id": 127,
+      "key": "assault",
+      "localizedName": "Assault Cuirass"
+    },
+    "137": {
+      "id": 137,
+      "key": "manta",
+      "localizedName": "Manta Style"
+    },
+    "145": {
+      "id": 145,
+      "key": "bfury",
+      "localizedName": "Battle Fury"
+    },
+    "154": {
+      "id": 154,
+      "key": "satanic",
+      "localizedName": "Satanic"
+    },
+    "160": {
+      "id": 160,
+      "key": "butterfly",
+      "localizedName": "Butterfly"
+    },
+    "237": {
+      "id": 237,
+      "key": "faerie_fire",
+      "localizedName": "Faerie Fire"
+    },
+    "254": {
+      "id": 254,
+      "key": "glimmer_cape",
+      "localizedName": "Glimmer Cape"
+    }
+  }
+}

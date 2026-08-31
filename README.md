@@ -1,0 +1,112 @@
+# Dota 2 Draft Recommender
+
+App multiplataforma (**web + iOS + Android**, un solo código con **Expo**) que recomienda
+**picks de héroes** y muestra **builds de items por fase**, usando datos de la API pública de
+**[OpenDota](https://docs.opendota.com/)**.
+
+Todo lo que se muestra proviene de datos reales de OpenDota — **sin narrativa de
+"estrategia" inventada**. El motor es transparente: cada recomendación enseña de qué
+números sale.
+
+## Qué hace (MVP)
+
+- **Tablero de draft**: 5 slots para tu equipo, 5 para el enemigo y baneos.
+- **Recomendación de héroes** ordenada por una ventaja combinada de tres señales reales:
+  - **Meta** — win rate del héroe en el bracket elegido (`/heroStats`).
+  - **Counter** — qué tan bien enfrenta al equipo enemigo (`/heroes/{id}/matchups`).
+  - **Rol faltante** — cubre roles core que a tu equipo le faltan (roles de `/heroStats`).
+- **Ficha de héroe**: win rate por bracket, **build de items por fase** (inicio / temprano /
+  medio / tardío, de `/heroes/{id}/itemPopularity`) y tabla de matchups (fuerte/débil contra).
+- **Ajustes**: pesos configurables de cada señal.
+
+## Alcance honesto (qué da y qué NO da OpenDota)
+
+| Pedido original | Estado | Fuente |
+| --- | --- | --- |
+| Recomendar picks según ambos equipos | ✅ Directo | `matchups` + `heroStats` |
+| Items con los que iniciar la partida | ✅ Datos reales | `itemPopularity.start` |
+| Items a craftear durante la partida | ✅ Datos reales | `itemPopularity.early/mid/late` |
+| Meta de profesionales | ✅ Agregado | `heroStats.pro_*` |
+| Items "para first blood" / "para runas" | ⚠️ No existe como dato | se muestran los items de inicio reales, sin etiquetar por propósito |
+| Sinergia con héroes aliados (dúos) | ⚠️ No hay endpoint directo | se aproxima por complementariedad de roles |
+| Texto de estrategias | ❌ No existe en la API | se decidió **no** inventar prosa; solo datos |
+
+## Arquitectura
+
+```
+Precálculo (fuera de la app)        App cliente (Expo)
+─────────────────────────────       ─────────────────────────────
+scripts/build-dataset.ts    ──►     assets/dataset.json  ──►  src/engine (TS puro)
+(OpenDota, 1×/día en CI)            (bundle compacto)          recommendHeroes / itemBuildFor
+                                                                      │
+                                                               app/ (expo-router)
+```
+
+El cliente **no** llama a OpenDota en tiempo real (evita el rate-limit de ~60 req/min y las
+~124 llamadas necesarias para la matriz de counters). En su lugar consume un `dataset.json`
+precalculado por GitHub Actions (cron diario) o de forma local.
+
+### Estructura
+
+```
+app/                     Rutas (expo-router): index (Draft), hero/[id], settings
+src/
+  data/types.ts          Tipos del dataset
+  data/dataset.ts        Carga del dataset bundled + helpers
+  engine/recommend.ts    Motor de recomendación (puro, testeable)
+  engine/itemBuild.ts    Resolución de builds por fase
+  engine/*.test.ts       Tests con Vitest
+  store/draftStore.ts    Estado del draft (Zustand)
+  components/            HeroImage, DraftColumn, HeroPicker, RecommendationCard, ItemBuild, MatchupTable
+  theme.ts               Tokens visuales
+scripts/
+  build-dataset.ts        Pipeline real de OpenDota
+  build-sample-dataset.ts Dataset de muestra (offline)
+assets/dataset.json       Dataset consumido por la app
+.github/workflows/        CI (test) + build-dataset (cron)
+```
+
+## Puesta en marcha
+
+```bash
+npm install
+
+# 1) Generar el dataset
+npm run build:dataset          # datos REALES de OpenDota (requiere acceso a api.opendota.com)
+npm run build:dataset:sample   # dataset de MUESTRA para desarrollar offline
+
+# 2) Arrancar la app
+npm run web                    # navegador
+npm start                      # Expo (elige iOS / Android / web)
+```
+
+> ℹ️ `npm run build:dataset` necesita salida a `api.opendota.com`. Algunos entornos
+> (sandboxes, ciertas VPN/proxies) lo bloquean; en ese caso usa el dataset de muestra o
+> ejecuta el pipeline en GitHub Actions. Define `OPENDOTA_API_KEY` para subir el rate limit.
+
+## Cómo se calcula la recomendación
+
+Para cada héroe disponible:
+
+```
+score = w_meta   · (winrate_bracket − 0.5)
+      + w_counter · promedio(winrate_vs_enemigo − 0.5)
+      + w_role    · (roles_faltantes_cubiertos · 0.05)
+```
+
+Los win rates se **suavizan** (shrinkage bayesiano hacia 50%) para no sobrevalorar muestras
+pequeñas. Pesos por defecto: `meta=1`, `counter=2`, `role=1` (ajustables en Ajustes).
+
+## Tests
+
+```bash
+npm test         # Vitest (motor)
+npm run typecheck
+```
+
+## Roadmap (fuera del MVP)
+
+- Sinergia real por dúos (minando partidas / `explorer`).
+- Draft profesional detallado (picks/bans por partida).
+- Timings de item avanzados (`scenarios/itemTimings`).
+- Filtros por parche y persistencia de perfil.

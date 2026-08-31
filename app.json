@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Dota Draft Recommender",
+    "slug": "dota-draft-recommender",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "dotadraft",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0f1419"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
