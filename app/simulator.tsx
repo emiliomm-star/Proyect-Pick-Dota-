@@ -7,6 +7,7 @@ import { getAttributes } from '../src/data/heroAttributes';
 import { predictDraft } from '../src/engine';
 import { HeroImage } from '../src/components/HeroImage';
 import { HeroPicker } from '../src/components/HeroPicker';
+import { DraftReportView } from '../src/components/DraftReportView';
 
 type Side = 'radiant' | 'dire';
 
@@ -14,6 +15,7 @@ export default function SimulatorScreen() {
   const [radiant, setRadiant] = useState<number[]>([]);
   const [dire, setDire] = useState<number[]>([]);
   const [picker, setPicker] = useState<Side | null>(null);
+  const [showReport, setShowReport] = useState(false);
 
   const used = useMemo(() => new Set<number>([...radiant, ...dire]), [radiant, dire]);
 
@@ -96,8 +98,22 @@ export default function SimulatorScreen() {
         </View>
       )}
 
+      {/* Educational report */}
+      {!prediction.incomplete && (
+        <Pressable
+          onPress={() => setShowReport((v) => !v)}
+          style={({ pressed }) => ({ paddingVertical: spacing(3), borderRadius: radius.md, borderWidth: 1, borderColor: colors.neutral, alignItems: 'center', backgroundColor: pressed ? colors.surfaceAlt : 'transparent' })}
+        >
+          <Text style={{ color: colors.neutral, fontWeight: '800' }}>
+            {showReport ? 'Ocultar análisis' : '🔍 Analizar por qué gana + cómo mejorar'}
+          </Text>
+        </Pressable>
+      )}
+
+      {showReport && !prediction.incomplete && <DraftReportView radiant={radiant} dire={dire} />}
+
       <Pressable
-        onPress={() => { setRadiant([]); setDire([]); }}
+        onPress={() => { setRadiant([]); setDire([]); setShowReport(false); }}
         style={({ pressed }) => ({ alignSelf: 'flex-start', paddingHorizontal: spacing(4), paddingVertical: spacing(2.5), borderRadius: radius.md, borderWidth: 1, borderColor: colors.accent, backgroundColor: pressed ? colors.accent : 'transparent' })}
       >
         <Text style={{ color: colors.text, fontWeight: '700' }}>Reiniciar simulación</Text>

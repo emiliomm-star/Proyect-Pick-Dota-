@@ -4,3 +4,4 @@ export * from './composition';
 export * from './counters';
 export * from './bans';
 export * from './predict';
+export * from './report';
