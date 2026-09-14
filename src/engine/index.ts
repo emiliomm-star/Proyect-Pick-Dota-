@@ -3,3 +3,4 @@ export * from './itemBuild';
 export * from './composition';
 export * from './counters';
 export * from './bans';
+export * from './predict';

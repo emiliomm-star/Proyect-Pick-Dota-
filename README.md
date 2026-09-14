@@ -19,6 +19,18 @@ números sale.
   medio / tardío, de `/heroes/{id}/itemPopularity`) y tabla de matchups (fuerte/débil contra).
 - **Ajustes**: pesos configurables de cada señal.
 
+## Diferenciadores vs Dota Plus
+
+- **Análisis de composición**: perfil del equipo (mezcla de daño, lockdown, iniciación,
+  teamfight, waveclear, save), avisos de huecos y amenaza enemiga. *(Requiere expandir la
+  tabla `src/data/heroAttributes.ts` a todos los héroes; hoy ~10 curados, resto neutro.)*
+- **Matriz de counters transparente** (`/counters`): ranking de quién contrarresta a la
+  línea enemiga con el desglose por rival (Dota Plus es una caja negra).
+- **Planificador de baneos** (`/bans`): meta + amenaza a tu equipo + ban rate pro.
+- **Simulador de batalla de pickeos** (`/simulator`): estima la probabilidad de victoria
+  de draft A vs draft B (hot-seat), sin reproducir la partida. Coeficientes pre-calibración;
+  a futuro se ajustan con resultados de partidas pro.
+
 ## Alcance honesto (qué da y qué NO da OpenDota)
 
 | Pedido original | Estado | Fuente |

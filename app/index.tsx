@@ -92,6 +92,11 @@ export default function DraftScreen() {
               <Text style={toolTxt}>🚫 Baneos</Text>
             </Pressable>
           </Link>
+          <Link href="/simulator" asChild>
+            <Pressable style={toolBtn}>
+              <Text style={toolTxt}>⚔️ Simulador</Text>
+            </Pressable>
+          </Link>
         </View>
 
         {/* Draft board */}
