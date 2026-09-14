@@ -1,7 +1,7 @@
 // Room persistence + realtime sync for the online captains arena.
 // All functions no-op / throw clearly when Supabase is not configured.
 
-import { supabase } from '../lib/supabase';
+import { getSupabase } from '../lib/supabase';
 import { initialCaptainsState, type CaptainsState } from '../engine';
 
 export interface RoomRow {
@@ -11,8 +11,9 @@ export interface RoomRow {
 }
 
 function requireClient() {
-  if (!supabase) throw new Error('Supabase no está configurado (falta EXPO_PUBLIC_SUPABASE_URL / ANON_KEY).');
-  return supabase;
+  const client = getSupabase();
+  if (!client) throw new Error('Supabase no está configurado (falta EXPO_PUBLIC_SUPABASE_URL / ANON_KEY).');
+  return client;
 }
 
 /** Random 4-character room code (unambiguous characters). */
@@ -49,8 +50,8 @@ export async function setRoomState(code: string, state: CaptainsState): Promise<
 
 /** Subscribe to room changes. Returns an unsubscribe function. */
 export function subscribeRoom(code: string, onState: (state: CaptainsState) => void): () => void {
-  if (!supabase) return () => {};
-  const client = supabase;
+  const client = getSupabase();
+  if (!client) return () => {};
   const channel = client
     .channel(`arena_room:${code}`)
     .on(
