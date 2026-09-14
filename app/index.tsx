@@ -20,7 +20,8 @@ const TEAM_TITLES: Record<Team, string> = {
 };
 
 const toolBtn = {
-  flex: 1,
+  flexGrow: 1,
+  flexBasis: '45%' as const,
   paddingVertical: spacing(2.5),
   borderRadius: radius.md,
   borderWidth: 1,
@@ -81,7 +82,7 @@ export default function DraftScreen() {
         <BracketSelector value={bracket} onChange={setBracket} options={availableBrackets} />
 
         {/* Tools */}
-        <View style={{ flexDirection: 'row', gap: spacing(2) }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing(2) }}>
           <Link href="/counters" asChild>
             <Pressable style={toolBtn}>
               <Text style={toolTxt}>🛡️ Counters</Text>
@@ -95,6 +96,11 @@ export default function DraftScreen() {
           <Link href="/simulator" asChild>
             <Pressable style={toolBtn}>
               <Text style={toolTxt}>⚔️ Simulador</Text>
+            </Pressable>
+          </Link>
+          <Link href="/arena" asChild>
+            <Pressable style={toolBtn}>
+              <Text style={toolTxt}>🏟️ Arena</Text>
             </Pressable>
           </Link>
         </View>

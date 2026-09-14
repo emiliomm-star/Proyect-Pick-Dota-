@@ -6,3 +6,4 @@ export * from './bans';
 export * from './predict';
 export * from './report';
 export * from './calibrate';
+export * from './captainsMode';

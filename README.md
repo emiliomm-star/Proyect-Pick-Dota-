@@ -28,8 +28,13 @@ números sale.
   línea enemiga con el desglose por rival (Dota Plus es una caja negra).
 - **Planificador de baneos** (`/bans`): meta + amenaza a tu equipo + ban rate pro.
 - **Simulador de batalla de pickeos** (`/simulator`): estima la probabilidad de victoria
-  de draft A vs draft B (hot-seat), sin reproducir la partida. Coeficientes pre-calibración;
-  a futuro se ajustan con resultados de partidas pro.
+  de draft A vs draft B (hot-seat), sin reproducir la partida. Los coeficientes se calibran
+  con resultados de partidas pro (`scripts/calibrate.ts`, `assets/weights.json`).
+- **Informe educativo**: al cerrar una batalla explica *por qué* ganó un draft, fortalezas y
+  debilidades de cada uno, y una idea de mejora (swap que sube la probabilidad del ganador).
+- **Arena de capitanes local** (`/arena`): draft por turnos estilo Captains Mode (pass-and-play,
+  2 capitanes en un dispositivo) que termina en el veredicto + informe. Base lista para
+  multijugador online (Supabase) más adelante.
 
 ## Alcance honesto (qué da y qué NO da OpenDota)
 
@@ -116,9 +121,12 @@ npm test         # Vitest (motor)
 npm run typecheck
 ```
 
-## Roadmap (fuera del MVP)
+## Roadmap
 
+- **Arena multijugador online** (Supabase): salas por internet, turnos en tiempo real
+  (la base local ya está en `/arena`).
+- Expandir el overlay curado de `heroAttributes.ts` (hoy ~10 a mano; el resto usa la semilla
+  derivada de habilidades) para afinar composición y predictor.
 - Sinergia real por dúos (minando partidas / `explorer`).
-- Draft profesional detallado (picks/bans por partida).
 - Timings de item avanzados (`scenarios/itemTimings`).
 - Filtros por parche y persistencia de perfil.
