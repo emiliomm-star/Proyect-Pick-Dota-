@@ -5,7 +5,7 @@ import { Link, router } from 'expo-router';
 import { colors, radius, spacing } from '../src/theme';
 import { dataset, availableBrackets } from '../src/data/dataset';
 import { getAttributes } from '../src/data/heroAttributes';
-import { useDraftStore, type Team } from '../src/store/draftStore';
+import { useDraftStore, TEAM_LIMITS, type Team } from '../src/store/draftStore';
 import { recommendHeroes } from '../src/engine';
 import { DraftColumn } from '../src/components/DraftColumn';
 import { HeroPicker } from '../src/components/HeroPicker';
@@ -163,9 +163,9 @@ export default function DraftScreen() {
         visible={picker !== null}
         title={picker ? `Elegir héroe — ${TEAM_TITLES[picker]}` : ''}
         excluded={used}
+        remaining={picker ? TEAM_LIMITS[picker] - ({ myTeam, enemy, bans }[picker]).length : 0}
         onSelect={(id) => {
           if (picker) addHero(picker, id);
-          setPicker(null);
         }}
         onClose={() => setPicker(null)}
       />
