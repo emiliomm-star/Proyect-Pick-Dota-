@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "build:dataset": "tsx scripts/build-dataset.ts",
-    "build:dataset:sample": "tsx scripts/build-sample-dataset.ts"
+    "build:dataset:sample": "tsx scripts/build-sample-dataset.ts",
+    "calibrate": "tsx scripts/calibrate.ts"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",

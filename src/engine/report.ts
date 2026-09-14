@@ -8,7 +8,7 @@ import type { Bracket, Dataset } from '../data/types';
 import type { HeroAttributes } from '../data/heroAttributes';
 import { counterAdvantage } from './recommend';
 import { NEED_LABELS, teamProfile, type Need } from './composition';
-import { predictDraft, type KeyMatchup, PREDICT_COEFFS } from './predict';
+import { predictDraft, type KeyMatchup } from './predict';
 
 export type SideId = 'radiant' | 'dire';
 
@@ -169,7 +169,7 @@ export function draftReport(
   options: ReportOptions = {},
 ): DraftReport {
   const prediction = predictDraft(dataset, radiant, dire, options);
-  const { radiantWinProb, breakdown, keyMatchups } = prediction;
+  const { radiantWinProb, breakdown, keyMatchups, coeffsUsed } = prediction;
 
   let winner: SideId | 'tie';
   if (Math.abs(radiantWinProb - 0.5) < 0.02) winner = 'tie';
@@ -180,9 +180,9 @@ export function draftReport(
   // Explain the win: rank the three factors by contribution toward the winner.
   const sign = winner === 'dire' ? -1 : 1; // breakdown is radiant-perspective
   const contributions: { label: string; value: number }[] = [
-    { label: 'domina los enfrentamientos (matchups)', value: sign * PREDICT_COEFFS.matchup * breakdown.matchupEdge },
-    { label: 'tiene mejor meta (win rate de héroes)', value: sign * PREDICT_COEFFS.meta * breakdown.metaEdge },
-    { label: 'tiene mejor composición de equipo', value: sign * PREDICT_COEFFS.composition * breakdown.compEdge },
+    { label: 'domina los enfrentamientos (matchups)', value: sign * coeffsUsed.matchup * breakdown.matchupEdge },
+    { label: 'tiene mejor meta (win rate de héroes)', value: sign * coeffsUsed.meta * breakdown.metaEdge },
+    { label: 'tiene mejor composición de equipo', value: sign * coeffsUsed.composition * breakdown.compEdge },
   ];
   const summary = contributions
     .filter((c) => c.value > 0.02)

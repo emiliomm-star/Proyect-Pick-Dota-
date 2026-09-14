@@ -2,40 +2,47 @@
 // each side's win probability WITHOUT simulating the match — it composes the
 // matchup, meta and composition signals into a single logistic score.
 //
-// The coefficients below are sensible pre-calibration defaults. A later step
-// fits them against real pro-match outcomes (scripts + a calibrated weights
-// file); until then this is explicitly an ESTIMATE, not an oracle.
+// Coefficients come from assets/weights.json (calibrated by scripts/calibrate.ts
+// against real pro-match outcomes), falling back to pre-calibration defaults.
 
 import type { Bracket, Dataset } from '../data/types';
 import type { HeroAttributes } from '../data/heroAttributes';
+import { modelWeights } from '../data/weights';
 import { counterAdvantage, heroWinrate, shrunkWinrate } from './recommend';
 import { teamProfile } from './composition';
+
+export interface PredictCoeffs {
+  intercept: number;
+  matchup: number;
+  meta: number;
+  composition: number;
+}
 
 export interface PredictOptions {
   bracket?: Bracket;
   attributesFor?: (heroId: number) => HeroAttributes;
+  /** Override the model coefficients (defaults to the calibrated weights). */
+  coeffs?: PredictCoeffs;
 }
 
-export interface KeyMatchup {
-  /** Hero on the side the advantage favors. */
-  heroId: number;
-  /** The opponent. */
-  vsHeroId: number;
-  /** Win rate of heroId vs vsHeroId. */
-  winrate: number;
-  /** winrate - 0.5. */
-  advantage: number;
-  side: 'radiant' | 'dire';
-}
-
-export interface PredictionBreakdown {
+export interface DraftFeatures {
   /** Radiant-perspective average matchup advantage across all pairs. */
   matchupEdge: number;
   /** Radiant avg win rate minus dire avg win rate (bracket meta). */
   metaEdge: number;
   /** Radiant composition coverage minus dire, as a fraction (-1..1). */
   compEdge: number;
-  /** The logit fed into the sigmoid. */
+}
+
+export interface KeyMatchup {
+  heroId: number;
+  vsHeroId: number;
+  winrate: number;
+  advantage: number;
+  side: 'radiant' | 'dire';
+}
+
+export interface PredictionBreakdown extends DraftFeatures {
   logit: number;
 }
 
@@ -43,14 +50,23 @@ export interface Prediction {
   radiantWinProb: number;
   direWinProb: number;
   breakdown: PredictionBreakdown;
-  /** A few of the most lopsided individual matchups, for explanation. */
+  /** Coefficients actually applied (calibrated or overridden). */
+  coeffsUsed: PredictCoeffs;
   keyMatchups: KeyMatchup[];
-  /** True when at least one side has no heroes (result is not meaningful). */
   incomplete: boolean;
 }
 
-// Pre-calibration coefficients (see file header).
-export const PREDICT_COEFFS = { matchup: 8, meta: 6, composition: 0.5 } as const;
+/** Default (pre-calibration) coefficients, kept for reference/fallback. */
+export const PREDICT_COEFFS: PredictCoeffs = { intercept: 0, matchup: 8, meta: 6, composition: 0.5 };
+
+function currentCoeffs(): PredictCoeffs {
+  return {
+    intercept: modelWeights.intercept ?? 0,
+    matchup: modelWeights.matchup ?? PREDICT_COEFFS.matchup,
+    meta: modelWeights.meta ?? PREDICT_COEFFS.meta,
+    composition: modelWeights.composition ?? PREDICT_COEFFS.composition,
+  };
+}
 
 const sigmoid = (x: number): number => 1 / (1 + Math.exp(-x));
 
@@ -73,6 +89,22 @@ function compCoverage(
   return totalNeeds === 0 ? 0 : profile.covered.size / totalNeeds;
 }
 
+/** Compute the raw feature vector (same features used to train the model). */
+export function draftFeatures(
+  dataset: Dataset,
+  radiant: number[],
+  dire: number[],
+  options: PredictOptions = {},
+): DraftFeatures {
+  const bracket = options.bracket ?? 'legend';
+  const matchupEdge = avg(radiant.map((r) => counterAdvantage(dataset, r, dire)));
+  const metaEdge =
+    teamMetaWinrate(dataset, radiant, bracket) - teamMetaWinrate(dataset, dire, bracket);
+  const compEdge =
+    compCoverage(radiant, options.attributesFor) - compCoverage(dire, options.attributesFor);
+  return { matchupEdge, metaEdge, compEdge };
+}
+
 function keyMatchupsFor(dataset: Dataset, radiant: number[], dire: number[]): KeyMatchup[] {
   const cells: KeyMatchup[] = [];
   for (const r of radiant) {
@@ -92,39 +124,30 @@ function keyMatchupsFor(dataset: Dataset, radiant: number[], dire: number[]): Ke
   return cells.sort((a, b) => b.advantage - a.advantage).slice(0, 5);
 }
 
-/**
- * Estimate the win probability of a radiant draft vs a dire draft.
- */
+/** Estimate the win probability of a radiant draft vs a dire draft. */
 export function predictDraft(
   dataset: Dataset,
   radiant: number[],
   dire: number[],
   options: PredictOptions = {},
 ): Prediction {
-  const bracket = options.bracket ?? 'legend';
   const incomplete = radiant.length === 0 || dire.length === 0;
-
-  // Radiant-perspective matchup edge: average of each radiant hero's advantage
-  // vs the dire line-up.
-  const matchupEdge = avg(radiant.map((r) => counterAdvantage(dataset, r, dire)));
-
-  const metaEdge =
-    teamMetaWinrate(dataset, radiant, bracket) - teamMetaWinrate(dataset, dire, bracket);
-
-  const compEdge =
-    compCoverage(radiant, options.attributesFor) - compCoverage(dire, options.attributesFor);
+  const coeffsUsed = options.coeffs ?? currentCoeffs();
+  const features = draftFeatures(dataset, radiant, dire, options);
 
   const logit =
-    PREDICT_COEFFS.matchup * matchupEdge +
-    PREDICT_COEFFS.meta * metaEdge +
-    PREDICT_COEFFS.composition * compEdge;
+    coeffsUsed.intercept +
+    coeffsUsed.matchup * features.matchupEdge +
+    coeffsUsed.meta * features.metaEdge +
+    coeffsUsed.composition * features.compEdge;
 
   const radiantWinProb = incomplete ? 0.5 : sigmoid(logit);
 
   return {
     radiantWinProb,
     direWinProb: 1 - radiantWinProb,
-    breakdown: { matchupEdge, metaEdge, compEdge, logit },
+    breakdown: { ...features, logit },
+    coeffsUsed,
     keyMatchups: keyMatchupsFor(dataset, radiant, dire),
     incomplete,
   };

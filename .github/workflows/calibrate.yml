@@ -1,0 +1,55 @@
+name: Calibrate predictor
+
+# Fits the draft predictor's weights against real pro-match outcomes and commits
+# assets/weights.json. Weekly (drafts/meta move slowly) + manual trigger.
+# Uses many /matches/{id} calls, so it is separate from the daily dataset build.
+
+on:
+  schedule:
+    - cron: '0 7 * * 1' # Mondays 07:00 UTC
+  workflow_dispatch:
+    inputs:
+      max_matches:
+        description: 'How many pro matches to sample'
+        required: false
+        default: '400'
+
+permissions:
+  contents: write
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Ensure a dataset exists
+        run: test -s assets/dataset.json || npm run build:dataset
+
+      - name: Calibrate weights
+        env:
+          OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
+          MAX_MATCHES: ${{ github.event.inputs.max_matches || '400' }}
+        run: npm run calibrate
+
+      - name: Sanity check output
+        run: node -e "const w=require('./assets/weights.json'); if(!w.samples||w.samples<50){console.error('too few samples',w.samples);process.exit(1)} console.log('calibrated on',w.samples,'matches, acc',w.trainAccuracy)"
+
+      - name: Commit weights
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- assets/weights.json; then
+            echo "No weight changes."
+          else
+            git add assets/weights.json
+            git commit -m "chore(model): recalibrate predictor weights"
+            git push
+          fi
