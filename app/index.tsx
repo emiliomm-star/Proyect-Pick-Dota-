@@ -19,6 +19,17 @@ const TEAM_TITLES: Record<Team, string> = {
   bans: 'Baneos',
 };
 
+const toolBtn = {
+  flex: 1,
+  paddingVertical: spacing(2.5),
+  borderRadius: radius.md,
+  borderWidth: 1,
+  borderColor: colors.border,
+  backgroundColor: colors.surface,
+  alignItems: 'center' as const,
+};
+const toolTxt = { color: colors.text, fontWeight: '600' as const, fontSize: 13 };
+
 export default function DraftScreen() {
   const myTeam = useDraftStore((s) => s.myTeam);
   const enemy = useDraftStore((s) => s.enemy);
@@ -68,6 +79,20 @@ export default function DraftScreen() {
         </View>
 
         <BracketSelector value={bracket} onChange={setBracket} options={availableBrackets} />
+
+        {/* Tools */}
+        <View style={{ flexDirection: 'row', gap: spacing(2) }}>
+          <Link href="/counters" asChild>
+            <Pressable style={toolBtn}>
+              <Text style={toolTxt}>🛡️ Counters</Text>
+            </Pressable>
+          </Link>
+          <Link href="/bans" asChild>
+            <Pressable style={toolBtn}>
+              <Text style={toolTxt}>🚫 Baneos</Text>
+            </Pressable>
+          </Link>
+        </View>
 
         {/* Draft board */}
         <View style={{ flexDirection: 'row', gap: spacing(4) }}>

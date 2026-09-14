@@ -16,6 +16,8 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ title: 'Draft Recommender' }} />
         <Stack.Screen name="hero/[id]" options={{ title: 'Héroe' }} />
+        <Stack.Screen name="counters" options={{ title: 'Counters' }} />
+        <Stack.Screen name="bans" options={{ title: 'Baneos' }} />
         <Stack.Screen name="settings" options={{ title: 'Ajustes', presentation: 'modal' }} />
       </Stack>
     </>
