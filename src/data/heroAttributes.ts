@@ -70,6 +70,92 @@ export const heroAttributes: Record<number, HeroAttributes> = {
   25: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
   // Lion
   26: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: false, waveclear: false, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Bane
+  3: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: false, waveclear: false, sustain: false, save: true, escape: false, powerSpike: 'mid', durable: false },
+  // Bloodseeker
+  4: { damageTypes: ['physical', 'pure'], hardDisable: false, initiation: false, teamfight: false, waveclear: false, sustain: true, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Earthshaker
+  7: { damageTypes: ['magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: false, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Mirana
+  9: { damageTypes: ['magical', 'physical'], hardDisable: true, initiation: false, teamfight: false, waveclear: true, sustain: false, save: true, escape: true, powerSpike: 'mid', durable: false },
+  // Morphling
+  10: { damageTypes: ['physical'], hardDisable: false, initiation: false, teamfight: false, waveclear: false, sustain: true, save: false, escape: true, powerSpike: 'late', durable: false },
+  // Puck
+  13: { damageTypes: ['magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Razor
+  15: { damageTypes: ['magical', 'physical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Sand King
+  16: { damageTypes: ['magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: true },
+  // Storm Spirit
+  17: { damageTypes: ['magical'], hardDisable: false, initiation: true, teamfight: false, waveclear: true, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Sven
+  18: { damageTypes: ['physical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Vengeful Spirit
+  20: { damageTypes: ['physical'], hardDisable: true, initiation: false, teamfight: false, waveclear: false, sustain: false, save: true, escape: false, powerSpike: 'mid', durable: false },
+  // Windranger
+  21: { damageTypes: ['physical', 'magical'], hardDisable: true, initiation: false, teamfight: false, waveclear: false, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Zeus
+  22: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Kunkka
+  23: { damageTypes: ['physical', 'magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: true, escape: false, powerSpike: 'mid', durable: true },
+  // Shadow Shaman
+  27: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: false, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Slardar
+  28: { damageTypes: ['physical'], hardDisable: true, initiation: true, teamfight: false, waveclear: false, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Tidehunter
+  29: { damageTypes: ['physical', 'magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Witch Doctor
+  30: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: true, waveclear: false, sustain: true, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Lich
+  31: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Riki
+  32: { damageTypes: ['physical'], hardDisable: false, initiation: false, teamfight: false, waveclear: false, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Enigma
+  33: { damageTypes: ['magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Tinker
+  34: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Sniper
+  35: { damageTypes: ['physical'], hardDisable: false, initiation: false, teamfight: false, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'late', durable: false },
+  // Necrophos
+  36: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: true, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Warlock
+  37: { damageTypes: ['magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: false, sustain: true, save: true, escape: false, powerSpike: 'mid', durable: false },
+  // Beastmaster
+  38: { damageTypes: ['physical', 'magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: false, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Queen of Pain
+  39: { damageTypes: ['magical'], hardDisable: false, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Venomancer
+  40: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Faceless Void
+  41: { damageTypes: ['physical'], hardDisable: true, initiation: true, teamfight: true, waveclear: false, sustain: false, save: false, escape: true, powerSpike: 'late', durable: false },
+  // Death Prophet
+  43: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: true, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Phantom Assassin
+  44: { damageTypes: ['physical'], hardDisable: false, initiation: false, teamfight: false, waveclear: false, sustain: false, save: false, escape: true, powerSpike: 'late', durable: false },
+  // Pugna
+  45: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: true, save: true, escape: false, powerSpike: 'mid', durable: false },
+  // Templar Assassin
+  46: { damageTypes: ['physical', 'magical'], hardDisable: false, initiation: false, teamfight: false, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Viper
+  47: { damageTypes: ['magical', 'physical'], hardDisable: false, initiation: false, teamfight: false, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Invoker
+  74: { damageTypes: ['magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Ogre Magi
+  84: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: false, waveclear: false, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: true },
+  // Rubick
+  86: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: true, waveclear: false, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Disruptor
+  87: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: true, waveclear: false, sustain: false, save: true, escape: false, powerSpike: 'mid', durable: false },
+  // Keeper of the Light
+  90: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: true, waveclear: true, sustain: true, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Skywrath Mage
+  101: { damageTypes: ['magical'], hardDisable: false, initiation: false, teamfight: false, waveclear: true, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
+  // Ember Spirit
+  106: { damageTypes: ['physical', 'magical'], hardDisable: true, initiation: true, teamfight: true, waveclear: true, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
+  // Terrorblade
+  109: { damageTypes: ['physical'], hardDisable: false, initiation: false, teamfight: false, waveclear: true, sustain: false, save: true, escape: false, powerSpike: 'late', durable: false },
+  // Monkey King
+  114: { damageTypes: ['physical'], hardDisable: true, initiation: true, teamfight: true, waveclear: false, sustain: false, save: false, escape: true, powerSpike: 'mid', durable: false },
 };
 
 /**
