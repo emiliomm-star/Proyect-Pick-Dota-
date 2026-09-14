@@ -20,6 +20,7 @@ export default function RootLayout() {
         <Stack.Screen name="bans" options={{ title: 'Baneos' }} />
         <Stack.Screen name="simulator" options={{ title: 'Simulador' }} />
         <Stack.Screen name="arena" options={{ title: 'Arena de capitanes' }} />
+        <Stack.Screen name="arena-online" options={{ title: 'Arena online' }} />
         <Stack.Screen name="settings" options={{ title: 'Ajustes', presentation: 'modal' }} />
       </Stack>
     </>

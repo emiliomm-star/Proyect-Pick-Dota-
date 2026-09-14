@@ -103,6 +103,11 @@ export default function DraftScreen() {
               <Text style={toolTxt}>🏟️ Arena</Text>
             </Pressable>
           </Link>
+          <Link href="/arena-online" asChild>
+            <Pressable style={toolBtn}>
+              <Text style={toolTxt}>🌐 Online</Text>
+            </Pressable>
+          </Link>
         </View>
 
         {/* Draft board */}

@@ -33,8 +33,10 @@ números sale.
 - **Informe educativo**: al cerrar una batalla explica *por qué* ganó un draft, fortalezas y
   debilidades de cada uno, y una idea de mejora (swap que sube la probabilidad del ganador).
 - **Arena de capitanes local** (`/arena`): draft por turnos estilo Captains Mode (pass-and-play,
-  2 capitanes en un dispositivo) que termina en el veredicto + informe. Base lista para
-  multijugador online (Supabase) más adelante.
+  2 capitanes en un dispositivo) que termina en el veredicto + informe.
+- **Arena de capitanes online** (`/arena-online`): salas por internet con turnos en tiempo real
+  vía Supabase. Requiere configurar el proyecto (ver más abajo); sin configurar, la app avisa y
+  el resto sigue funcionando.
 
 ## Alcance honesto (qué da y qué NO da OpenDota)
 
@@ -100,6 +102,21 @@ npm start                      # Expo (elige iOS / Android / web)
 > ℹ️ `npm run build:dataset` necesita salida a `api.opendota.com`. Algunos entornos
 > (sandboxes, ciertas VPN/proxies) lo bloquean; en ese caso usa el dataset de muestra o
 > ejecuta el pipeline en GitHub Actions. Define `OPENDOTA_API_KEY` para subir el rate limit.
+
+### Arena online (Supabase, opcional)
+
+1. Crea un proyecto gratis en [supabase.com](https://supabase.com).
+2. En el **SQL Editor**, ejecuta `db/schema.sql`.
+3. En **Settings → API**, copia la *Project URL* y la *anon key*.
+4. Crea un `.env` (ver `.env.example`):
+   ```
+   EXPO_PUBLIC_SUPABASE_URL=...
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=...
+   ```
+5. `npm run web`. La pantalla `/arena-online` se activa sola.
+
+> Las políticas RLS del esquema son abiertas (MVP). Antes de un lanzamiento público conviene
+> endurecerlas (auth por sala o validación de jugadas en una Edge Function).
 
 ## Cómo se calcula la recomendación
 
