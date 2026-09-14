@@ -5,6 +5,7 @@ import { Link, router } from 'expo-router';
 import { colors, radius, spacing } from '../src/theme';
 import { dataset, availableBrackets } from '../src/data/dataset';
 import { getAttributes } from '../src/data/heroAttributes';
+import { telegramUser } from '../src/lib/telegram';
 import { useDraftStore, TEAM_LIMITS, type Team } from '../src/store/draftStore';
 import { recommendHeroes } from '../src/engine';
 import { DraftColumn } from '../src/components/DraftColumn';
@@ -64,9 +65,16 @@ export default function DraftScreen() {
       <ScrollView contentContainerStyle={{ padding: spacing(4), gap: spacing(4) }}>
         {/* Bracket + actions */}
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text style={{ color: colors.textMuted, fontSize: 12 }}>
-            Patch {dataset.patch} · {dataset.heroes.length} héroes
-          </Text>
+          <View>
+            {telegramUser()?.first_name && (
+              <Text style={{ color: colors.text, fontSize: 13, fontWeight: '700' }}>
+                Hola, {telegramUser()?.first_name} 👋
+              </Text>
+            )}
+            <Text style={{ color: colors.textMuted, fontSize: 12 }}>
+              Patch {dataset.patch} · {dataset.heroes.length} héroes
+            </Text>
+          </View>
           <View style={{ flexDirection: 'row', gap: spacing(3) }}>
             <Pressable onPress={reset} hitSlop={8}>
               <Text style={{ color: colors.accent, fontWeight: '600' }}>Reiniciar</Text>

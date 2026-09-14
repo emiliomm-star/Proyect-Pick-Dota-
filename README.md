@@ -118,6 +118,28 @@ npm start                      # Expo (elige iOS / Android / web)
 > Las políticas RLS del esquema son abiertas (MVP). Antes de un lanzamiento público conviene
 > endurecerlas (auth por sala o validación de jugadas en una Edge Function).
 
+## Telegram Mini App (opcional)
+
+La misma web puede abrirse **dentro de Telegram** como Mini App (identidad del usuario
+gratis, entrega fiable, fácil de compartir). La integración ya está en el repo
+(`app/+html.tsx` carga el SDK, `src/lib/telegram.ts` lo inicializa y lee el usuario, y no
+afecta al uso normal en navegador). Pasos para activarla:
+
+1. **Despliega la web** una vez:
+   ```bash
+   npx expo export --platform web   # genera la carpeta dist/
+   ```
+   Sube `dist/` a un hosting estático con HTTPS (Vercel, Netlify o Cloudflare Pages, gratis).
+   Anota la URL pública (p. ej. `https://tu-app.vercel.app`).
+2. **Crea el bot** con [@BotFather](https://t.me/BotFather): `/newbot` → obtén el token.
+3. **Registra la Mini App**: en BotFather, `/newapp` (o *Bot Settings → Menu Button*) y pega la
+   URL pública del paso 1.
+4. Abre el bot en Telegram → botón **Abrir** → tu app corre dentro de Telegram. Si el usuario
+   viene de Telegram, verás su nombre en la cabecera del draft.
+
+> No hace falta login: dentro de Telegram, `telegramUser()` devuelve el usuario. Fuera de
+> Telegram (navegador normal) la app funciona igual, sin ese dato.
+
 ## Cómo se calcula la recomendación
 
 Para cada héroe disponible:

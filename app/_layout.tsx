@@ -1,8 +1,15 @@
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { colors } from '../src/theme';
+import { initTelegram } from '../src/lib/telegram';
 
 export default function RootLayout() {
+  useEffect(() => {
+    // Initialize the Telegram Mini App if we're running inside Telegram.
+    initTelegram(colors.bg);
+  }, []);
+
   return (
     <>
       <StatusBar style="light" />
