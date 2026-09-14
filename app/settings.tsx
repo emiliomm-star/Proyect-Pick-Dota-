@@ -7,6 +7,7 @@ const LABELS: Record<keyof Weights, { title: string; help: string }> = {
   meta: { title: 'Meta (win rate)', help: 'Cuánto pesa el win rate del héroe en el bracket elegido.' },
   counter: { title: 'Counter', help: 'Cuánto pesa contrarrestar a los héroes del equipo enemigo.' },
   role: { title: 'Rol faltante', help: 'Cuánto pesa cubrir roles que a tu equipo le faltan.' },
+  composition: { title: 'Composición', help: 'Cuánto pesa cerrar huecos de composición (daño, lockdown, iniciación…).' },
 };
 
 function Stepper({

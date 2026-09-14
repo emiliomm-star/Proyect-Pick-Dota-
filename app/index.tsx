@@ -4,11 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 import { colors, radius, spacing } from '../src/theme';
 import { dataset, availableBrackets } from '../src/data/dataset';
+import { getAttributes } from '../src/data/heroAttributes';
 import { useDraftStore, type Team } from '../src/store/draftStore';
 import { recommendHeroes } from '../src/engine';
 import { DraftColumn } from '../src/components/DraftColumn';
 import { HeroPicker } from '../src/components/HeroPicker';
 import { RecommendationCard } from '../src/components/RecommendationCard';
+import { CompositionPanel } from '../src/components/CompositionPanel';
 import { HeroImage } from '../src/components/HeroImage';
 
 const TEAM_TITLES: Record<Team, string> = {
@@ -40,7 +42,7 @@ export default function DraftScreen() {
       recommendHeroes(
         dataset,
         { myTeam, enemy, bans },
-        { bracket, weights, limit: 12 },
+        { bracket, weights, limit: 12, attributesFor: getAttributes },
       ),
     [myTeam, enemy, bans, bracket, weights],
   );
@@ -109,6 +111,9 @@ export default function DraftScreen() {
             )}
           </View>
         </View>
+
+        {/* Composition analysis */}
+        <CompositionPanel myTeam={myTeam} enemy={enemy} />
 
         {/* Recommendations */}
         <View style={{ gap: spacing(2) }}>

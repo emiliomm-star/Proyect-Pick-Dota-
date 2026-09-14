@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 import { colors, radius, spacing } from '../theme';
 import { getHero } from '../data/dataset';
-import type { Recommendation } from '../engine';
+import { NEED_LABELS, type Recommendation } from '../engine';
 import { HeroImage } from './HeroImage';
 
 function pp(value: number): string {
@@ -28,7 +28,8 @@ interface Props {
 
 export function RecommendationCard({ rank, rec, onPress }: Props) {
   const hero = getHero(rec.heroId);
-  const { metaAdvantage, counterAdvantage, roleFit } = rec.breakdown;
+  const { metaAdvantage, counterAdvantage, roleFit, compositionFit } = rec.breakdown;
+  const gapLabels = rec.coveredGaps.map((g) => NEED_LABELS[g]);
 
   return (
     <Pressable
@@ -55,9 +56,9 @@ export function RecommendationCard({ rank, rec, onPress }: Props) {
         <Text style={{ color: colors.textMuted, fontSize: 11 }} numberOfLines={1}>
           {hero?.roles.slice(0, 4).join(' · ')}
         </Text>
-        {rec.coveredMissingRoles.length > 0 && (
+        {gapLabels.length > 0 && (
           <Text style={{ color: colors.neutral, fontSize: 11, marginTop: 2 }}>
-            Cubre: {rec.coveredMissingRoles.join(', ')}
+            Aporta: {gapLabels.join(', ')}
           </Text>
         )}
         <View style={{ flexDirection: 'row', marginTop: spacing(2) }}>
@@ -68,6 +69,7 @@ export function RecommendationCard({ rank, rec, onPress }: Props) {
             tone={counterAdvantage > 0 ? 'pos' : counterAdvantage < 0 ? 'neg' : 'muted'}
           />
           <Metric label="rol" value={`${Math.round(roleFit * 100)}%`} tone={roleFit > 0 ? 'pos' : 'muted'} />
+          <Metric label="comp" value={`${Math.round(compositionFit * 100)}%`} tone={compositionFit > 0 ? 'pos' : 'muted'} />
         </View>
       </View>
     </Pressable>

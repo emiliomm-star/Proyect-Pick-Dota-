@@ -4,6 +4,8 @@
 // in Node. No React / React Native imports may be added to this file.
 
 import type { Bracket, Dataset, HeroStat, Matchup } from '../data/types';
+import type { HeroAttributes } from '../data/heroAttributes';
+import { compositionBonus, needsCoveredBy, teamProfile, type Need } from './composition';
 
 export interface DraftState {
   /** Hero ids already picked by your team. */
@@ -21,12 +23,19 @@ export interface Weights {
   counter: number;
   /** Weight for filling roles your team is missing. */
   role: number;
+  /** Weight for closing your team's composition gaps (damage type, lockdown…). */
+  composition: number;
 }
 
 export interface RecommendOptions {
   bracket?: Bracket;
   weights?: Partial<Weights>;
   limit?: number;
+  /**
+   * Resolves a hero id to its curated attributes. When provided, composition
+   * gaps are computed and candidates are rewarded for closing them.
+   */
+  attributesFor?: (heroId: number) => HeroAttributes;
 }
 
 export interface RecommendationBreakdown {
@@ -36,6 +45,8 @@ export interface RecommendationBreakdown {
   counterAdvantage: number;
   /** Fraction of your team's missing core roles this hero covers (0..1). */
   roleFit: number;
+  /** Fraction of the team's composition gaps this hero closes (0..1). */
+  compositionFit: number;
 }
 
 export interface Recommendation {
@@ -44,9 +55,11 @@ export interface Recommendation {
   breakdown: RecommendationBreakdown;
   /** Core roles this hero would add that the team currently lacks. */
   coveredMissingRoles: string[];
+  /** Composition needs this hero would close (only set when attributes given). */
+  coveredGaps: Need[];
 }
 
-export const DEFAULT_WEIGHTS: Weights = { meta: 1, counter: 2, role: 1 };
+export const DEFAULT_WEIGHTS: Weights = { meta: 1, counter: 2, role: 1, composition: 1.5 };
 
 /** Core roles we try to make sure a team covers. */
 export const CORE_ROLES = ['Carry', 'Support', 'Initiator', 'Disabler', 'Nuker', 'Durable'] as const;
@@ -57,6 +70,9 @@ export const CORE_ROLES = ['Carry', 'Support', 'Initiator', 'Disabler', 'Nuker',
  * Covering the whole missing-role set is worth ~5 percentage points of edge.
  */
 const ROLE_SCALE = 0.05;
+
+/** Closing the whole composition-gap set is worth ~6 percentage points of edge. */
+const COMPOSITION_SCALE = 0.06;
 
 /** Prior strength (in games) used to shrink small-sample win rates toward 50%. */
 const SHRINKAGE_GAMES = 200;
@@ -133,6 +149,11 @@ export function recommendHeroes(
   const unavailable = new Set<number>([...draft.myTeam, ...draft.enemy, ...draft.bans]);
   const missing = new Set(missingCoreRoles(dataset, draft.myTeam));
 
+  const attributesFor = options.attributesFor;
+  const gaps: Need[] = attributesFor
+    ? teamProfile(draft.myTeam.map(attributesFor)).gaps
+    : [];
+
   const recs: Recommendation[] = [];
   for (const hero of dataset.heroes) {
     if (unavailable.has(hero.id)) continue;
@@ -143,16 +164,27 @@ export function recommendHeroes(
     const coveredMissingRoles = hero.roles.filter((r) => missing.has(r));
     const roleFit = missing.size === 0 ? 0 : coveredMissingRoles.length / missing.size;
 
+    let compositionFit = 0;
+    let coveredGaps: Need[] = [];
+    if (attributesFor && draft.myTeam.length > 0) {
+      const attrs = attributesFor(hero.id);
+      compositionFit = compositionBonus(attrs, gaps);
+      const covered = needsCoveredBy(attrs);
+      coveredGaps = gaps.filter((g) => covered.has(g));
+    }
+
     const score =
       weights.meta * metaAdvantage +
       weights.counter * counter +
-      weights.role * (roleFit * ROLE_SCALE);
+      weights.role * (roleFit * ROLE_SCALE) +
+      weights.composition * (compositionFit * COMPOSITION_SCALE);
 
     recs.push({
       heroId: hero.id,
       score,
-      breakdown: { metaAdvantage, counterAdvantage: counter, roleFit },
+      breakdown: { metaAdvantage, counterAdvantage: counter, roleFit, compositionFit },
       coveredMissingRoles,
+      coveredGaps,
     });
   }
 
