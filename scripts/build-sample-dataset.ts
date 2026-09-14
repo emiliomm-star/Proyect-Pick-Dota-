@@ -162,6 +162,15 @@ const dataset: Dataset = {
   matchups: Object.fromEntries(HEROES.map((h) => [h.id, matchupsFor(h.id)])),
   itemPopularity: Object.fromEntries(HEROES.map((h) => [h.id, BUILDS[h.build]])),
   itemConstants: Object.fromEntries(ITEMS.map((i) => [i.id, i])),
+  // A minimal derived-attribute seed so the field is exercised offline. The
+  // curated overlay (heroAttributes.ts) still takes precedence for these heroes.
+  heroAttributes: Object.fromEntries(
+    HEROES.map((h) => {
+      const damageTypes: ('magical' | 'physical' | 'pure')[] =
+        h.primaryAttr === 'int' ? ['magical'] : ['physical'];
+      return [h.id, { damageTypes }];
+    }),
+  ),
 };
 
 const outDir = resolve(__dirname, '..', 'assets');

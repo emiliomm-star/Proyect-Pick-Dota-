@@ -18,6 +18,7 @@ import type {
   Bracket,
   Dataset,
   Hero,
+  HeroAttributeSeed,
   HeroItemBuckets,
   HeroStat,
   ItemConstant,
@@ -104,6 +105,63 @@ interface RawItemConstant {
   img?: string;
 }
 
+// --- Attribute derivation from ability data ---
+interface RawAbility {
+  dname?: string;
+  dmg_type?: string;
+  desc?: string;
+  behavior?: string | string[];
+}
+interface RawHeroAbilities {
+  abilities?: string[];
+}
+
+const DISABLE_WORDS = ['stun', 'hex', 'root', 'ensnar', 'taunt', 'leash', 'banish', 'sleep', 'immobil'];
+const ESCAPE_WORDS = ['blink', 'teleport', 'invisib', 'phase', 'untargetable'];
+
+function mapDamageType(dmg?: string): ('magical' | 'physical' | 'pure')[] {
+  switch ((dmg ?? '').toLowerCase()) {
+    case 'magical': return ['magical'];
+    case 'physical': return ['physical'];
+    case 'pure': return ['pure'];
+    case 'composite': return ['magical', 'physical'];
+    default: return [];
+  }
+}
+
+/**
+ * Derive an attribute seed for a hero from its abilities. Damage types are real
+ * (from each ability's dmg_type); hardDisable/escape are a keyword heuristic on
+ * ability text — intentionally conservative, and overridden by the curated
+ * overlay in heroAttributes.ts.
+ */
+function deriveAttributes(
+  heroInternalName: string,
+  heroAbilities: Record<string, RawHeroAbilities>,
+  abilities: Record<string, RawAbility>,
+): HeroAttributeSeed | null {
+  const list = heroAbilities[heroInternalName]?.abilities ?? [];
+  const names = list.filter((n) => n && n !== 'generic_hidden' && !n.includes('special_bonus'));
+  if (names.length === 0) return null;
+
+  const damage = new Set<'magical' | 'physical' | 'pure'>();
+  let hardDisable = false;
+  let escape = false;
+
+  for (const name of names) {
+    const ab = abilities[name];
+    if (!ab) continue;
+    for (const d of mapDamageType(ab.dmg_type)) damage.add(d);
+    const text = `${ab.dname ?? ''} ${ab.desc ?? ''}`.toLowerCase();
+    if (DISABLE_WORDS.some((w) => text.includes(w))) hardDisable = true;
+    if (ESCAPE_WORDS.some((w) => text.includes(w))) escape = true;
+  }
+
+  const seed: HeroAttributeSeed = { hardDisable, escape };
+  if (damage.size > 0) seed.damageTypes = [...damage];
+  return seed;
+}
+
 function toBucket(map: Record<string, number>, keyById: Map<number, string>): ItemCount[] {
   return Object.entries(map || {})
     .map(([id, count]) => {
@@ -119,6 +177,10 @@ async function main() {
 
   console.log('Fetching item constants…');
   const rawItems = await getJson<Record<string, RawItemConstant>>('/constants/items');
+
+  console.log('Fetching ability constants (for attribute derivation)…');
+  const rawAbilities = await getJson<Record<string, RawAbility>>('/constants/abilities');
+  const rawHeroAbilities = await getJson<Record<string, RawHeroAbilities>>('/constants/hero_abilities');
 
   const itemConstants: Record<number, ItemConstant> = {};
   const keyById = new Map<number, string>();
@@ -198,6 +260,13 @@ async function main() {
     }
   }
 
+  const heroAttributesSeed: Record<number, HeroAttributeSeed> = {};
+  for (const hero of heroes) {
+    const seed = deriveAttributes(hero.name, rawHeroAbilities, rawAbilities);
+    if (seed) heroAttributesSeed[hero.id] = seed;
+  }
+  console.log(`Derived attribute seeds for ${Object.keys(heroAttributesSeed).length} heroes`);
+
   const dataset: Dataset = {
     patch,
     generatedAt: new Date().toISOString(),
@@ -206,6 +275,7 @@ async function main() {
     matchups,
     itemPopularity,
     itemConstants,
+    heroAttributes: heroAttributesSeed,
   };
 
   const outDir = resolve(__dirname, '..', 'assets');

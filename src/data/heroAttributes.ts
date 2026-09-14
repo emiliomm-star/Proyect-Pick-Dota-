@@ -7,6 +7,9 @@
 // the sample heroes and is meant to be expanded to the full roster; heroes
 // without an entry fall back to a neutral profile.
 
+import { dataset } from './dataset';
+import type { HeroAttributeSeed } from './types';
+
 export type DamageType = 'magical' | 'physical' | 'pure';
 export type PowerSpike = 'early' | 'mid' | 'late';
 
@@ -69,12 +72,24 @@ export const heroAttributes: Record<number, HeroAttributes> = {
   26: { damageTypes: ['magical'], hardDisable: true, initiation: false, teamfight: false, waveclear: false, sustain: false, save: false, escape: false, powerSpike: 'mid', durable: false },
 };
 
-/** Attributes for a hero, falling back to a neutral profile when uncurated. */
-export function getAttributes(heroId: number): HeroAttributes {
-  return heroAttributes[heroId] ?? NEUTRAL;
+/**
+ * Merge attribute sources into a full profile. Precedence, lowest to highest:
+ * neutral defaults < pipeline-derived seed < hand-curated overlay.
+ * (Pure and testable — does not read the bundled dataset.)
+ */
+export function mergeAttributes(
+  seed?: HeroAttributeSeed,
+  curated?: Partial<HeroAttributes>,
+): HeroAttributes {
+  return { ...NEUTRAL, ...(seed ?? {}), ...(curated ?? {}) };
 }
 
-/** True when we have curated (non-fallback) data for the hero. */
+/** Attributes for a hero: curated overlay > dataset seed > neutral fallback. */
+export function getAttributes(heroId: number): HeroAttributes {
+  return mergeAttributes(dataset.heroAttributes?.[heroId], heroAttributes[heroId]);
+}
+
+/** True when we have curated or pipeline-derived data for the hero. */
 export function hasAttributes(heroId: number): boolean {
-  return heroId in heroAttributes;
+  return heroId in heroAttributes || dataset.heroAttributes?.[heroId] != null;
 }

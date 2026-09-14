@@ -89,6 +89,25 @@ export interface ItemConstant {
   img?: string;
 }
 
+/**
+ * Attribute seed derived in the pipeline from OpenDota ability data. Damage
+ * types are real (from each ability's dmg_type); the tactical flags are a
+ * best-effort heuristic (keyword scan of ability text) meant to be overridden
+ * by the curated overlay in heroAttributes.ts.
+ */
+export interface HeroAttributeSeed {
+  damageTypes?: ('magical' | 'physical' | 'pure')[];
+  hardDisable?: boolean;
+  initiation?: boolean;
+  teamfight?: boolean;
+  waveclear?: boolean;
+  sustain?: boolean;
+  save?: boolean;
+  escape?: boolean;
+  powerSpike?: 'early' | 'mid' | 'late';
+  durable?: boolean;
+}
+
 export interface Dataset {
   /** Game patch the data was aggregated on, e.g. "7.37". */
   patch: string;
@@ -102,4 +121,6 @@ export interface Dataset {
   itemPopularity: Record<number, HeroItemBuckets>;
   /** itemId -> item metadata for rendering builds. */
   itemConstants: Record<number, ItemConstant>;
+  /** heroId -> attribute seed derived from ability data (optional). */
+  heroAttributes?: Record<number, HeroAttributeSeed>;
 }
