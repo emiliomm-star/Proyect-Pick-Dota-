@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Dataset } from '../data/types';
-import { predictDraft } from './predict';
+import type { HeroAttributes } from '../data/heroAttributes';
+import { draftFeatures, predictDraft } from './predict';
 
 function makeDataset(): Dataset {
   return {
@@ -55,5 +56,45 @@ describe('predictDraft', () => {
     const a = predictDraft(ds, [1], [2]).radiantWinProb;
     const b = predictDraft(ds, [2], [1]).radiantWinProb;
     expect(a).toBeCloseTo(1 - b, 2);
+  });
+
+  it('timingEdge is 0 without attributesFor (feature stays inert)', () => {
+    const p = predictDraft(makeDataset(), [1], [2]);
+    expect(p.breakdown.timingEdge).toBe(0);
+  });
+});
+
+const attr = (powerSpike: HeroAttributes['powerSpike']): HeroAttributes => ({
+  damageTypes: ['physical'],
+  hardDisable: false,
+  initiation: false,
+  teamfight: false,
+  waveclear: false,
+  sustain: false,
+  save: false,
+  escape: false,
+  powerSpike,
+  durable: false,
+});
+
+describe('draftFeatures timingEdge', () => {
+  const ds = makeDataset();
+
+  it('is positive when radiant leans later than dire', () => {
+    const attrsFor = (id: number) => (id === 1 ? attr('late') : attr('early'));
+    const f = draftFeatures(ds, [1], [2], { attributesFor: attrsFor });
+    expect(f.timingEdge).toBeCloseTo(2, 5); // late(+1) - early(-1) = 2
+  });
+
+  it('is negative when radiant leans earlier than dire', () => {
+    const attrsFor = (id: number) => (id === 1 ? attr('early') : attr('late'));
+    const f = draftFeatures(ds, [1], [2], { attributesFor: attrsFor });
+    expect(f.timingEdge).toBeCloseTo(-2, 5);
+  });
+
+  it('is 0 when both teams share the same lean', () => {
+    const attrsFor = () => attr('mid');
+    const f = draftFeatures(ds, [1], [2], { attributesFor: attrsFor });
+    expect(f.timingEdge).toBe(0);
   });
 });

@@ -16,6 +16,7 @@ export interface PredictCoeffs {
   matchup: number;
   meta: number;
   composition: number;
+  timing: number;
 }
 
 export interface PredictOptions {
@@ -32,6 +33,13 @@ export interface DraftFeatures {
   metaEdge: number;
   /** Radiant composition coverage minus dire, as a fraction (-1..1). */
   compEdge: number;
+  /**
+   * Radiant avg power-spike lean minus dire's (-1..1). Each hero scores
+   * early=-1, mid=0, late=+1, then teams are averaged and compared. The SIGN
+   * of this feature's effect on the outcome isn't assumed here — it's learned
+   * by calibration (scripts/calibrate.ts) from real match results.
+   */
+  timingEdge: number;
 }
 
 export interface KeyMatchup {
@@ -56,8 +64,12 @@ export interface Prediction {
   incomplete: boolean;
 }
 
-/** Default (pre-calibration) coefficients, kept for reference/fallback. */
-export const PREDICT_COEFFS: PredictCoeffs = { intercept: 0, matchup: 8, meta: 6, composition: 0.5 };
+/**
+ * Default (pre-calibration) coefficients, kept for reference/fallback.
+ * `timing` starts at 0 (inert) because, unlike the others, its direction isn't
+ * a safe hand-picked guess — it's meant to be learned by calibration.
+ */
+export const PREDICT_COEFFS: PredictCoeffs = { intercept: 0, matchup: 8, meta: 6, composition: 0.5, timing: 0 };
 
 function currentCoeffs(): PredictCoeffs {
   return {
@@ -65,6 +77,7 @@ function currentCoeffs(): PredictCoeffs {
     matchup: modelWeights.matchup ?? PREDICT_COEFFS.matchup,
     meta: modelWeights.meta ?? PREDICT_COEFFS.meta,
     composition: modelWeights.composition ?? PREDICT_COEFFS.composition,
+    timing: modelWeights.timing ?? PREDICT_COEFFS.timing,
   };
 }
 
@@ -89,6 +102,21 @@ function compCoverage(
   return totalNeeds === 0 ? 0 : profile.covered.size / totalNeeds;
 }
 
+const POWER_SPIKE_SCORE: Record<HeroAttributes['powerSpike'], number> = {
+  early: -1,
+  mid: 0,
+  late: 1,
+};
+
+/** Team's average power-spike lean (-1 fully early .. +1 fully late). */
+function teamTimingLean(
+  team: number[],
+  attributesFor?: (heroId: number) => HeroAttributes,
+): number {
+  if (!attributesFor || team.length === 0) return 0;
+  return avg(team.map((id) => POWER_SPIKE_SCORE[attributesFor(id).powerSpike]));
+}
+
 /** Compute the raw feature vector (same features used to train the model). */
 export function draftFeatures(
   dataset: Dataset,
@@ -102,7 +130,9 @@ export function draftFeatures(
     teamMetaWinrate(dataset, radiant, bracket) - teamMetaWinrate(dataset, dire, bracket);
   const compEdge =
     compCoverage(radiant, options.attributesFor) - compCoverage(dire, options.attributesFor);
-  return { matchupEdge, metaEdge, compEdge };
+  const timingEdge =
+    teamTimingLean(radiant, options.attributesFor) - teamTimingLean(dire, options.attributesFor);
+  return { matchupEdge, metaEdge, compEdge, timingEdge };
 }
 
 function keyMatchupsFor(dataset: Dataset, radiant: number[], dire: number[]): KeyMatchup[] {
@@ -139,7 +169,8 @@ export function predictDraft(
     coeffsUsed.intercept +
     coeffsUsed.matchup * features.matchupEdge +
     coeffsUsed.meta * features.metaEdge +
-    coeffsUsed.composition * features.compEdge;
+    coeffsUsed.composition * features.compEdge +
+    coeffsUsed.timing * features.timingEdge;
 
   const radiantWinProb = incomplete ? 0.5 : sigmoid(logit);
 

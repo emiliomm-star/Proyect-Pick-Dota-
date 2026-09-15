@@ -75,7 +75,10 @@ async function main() {
         const dire = pb.filter((p) => p.is_pick && p.team === 1).map((p) => p.hero_id);
         if (radiant.length === 5 && dire.length === 5) {
           const f = draftFeatures(dataset, radiant, dire, { bracket: 'immortal', attributesFor: getAttributes });
-          samples.push({ features: [f.matchupEdge, f.metaEdge, f.compEdge], label: match.radiant_win ? 1 : 0 });
+          samples.push({
+            features: [f.matchupEdge, f.metaEdge, f.compEdge, f.timingEdge],
+            label: match.radiant_win ? 1 : 0,
+          });
         }
       }
     } catch (err) {
@@ -99,10 +102,11 @@ async function main() {
     matchup: fit.coeffs[0],
     meta: fit.coeffs[1],
     composition: fit.coeffs[2],
+    timing: fit.coeffs[3],
     calibratedAt: new Date().toISOString(),
     samples: samples.length,
     trainAccuracy: Number(acc.toFixed(4)),
-    note: 'Fit on pro matches. compEdge is weak until heroAttributes covers the full roster.',
+    note: 'Fit on pro matches. compEdge/timingEdge are weak until heroAttributes covers the full roster.',
   };
 
   const outFile = resolve(__dirname, '..', 'assets', 'weights.json');

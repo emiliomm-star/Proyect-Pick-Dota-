@@ -72,6 +72,7 @@ export default function SimulatorScreen() {
           <Factor label="Ventaja de matchups" value={prediction.breakdown.matchupEdge} />
           <Factor label="Meta (win rate)" value={prediction.breakdown.metaEdge} />
           <Factor label="Composición" value={prediction.breakdown.compEdge} />
+          <TimingFactor value={prediction.breakdown.timingEdge} />
         </View>
       )}
 
@@ -185,6 +186,20 @@ function Factor({ label, value }: { label: string; value: number }) {
       <Text style={{ color: tone, fontSize: 12, fontWeight: '700' }}>
         {pts >= 0 ? '+' : ''}{pts.toFixed(1)} (Radiant)
       </Text>
+    </View>
+  );
+}
+
+function TimingFactor({ value }: { value: number }) {
+  // Unlike the other factors, a positive/negative sign here doesn't mean
+  // "good/bad for Radiant" by itself — whether leaning early or late helps
+  // depends on the learned coefficient, not the raw lean. Keep it neutral.
+  const leaning =
+    value > 0.05 ? 'Radiant más late' : value < -0.05 ? 'Dire más late' : 'Curvas parejas';
+  return (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <Text style={{ color: colors.textMuted, fontSize: 12 }}>Timing (early/mid/late)</Text>
+      <Text style={{ color: colors.text, fontSize: 12, fontWeight: '700' }}>{leaning}</Text>
     </View>
   );
 }

@@ -183,6 +183,7 @@ export function draftReport(
     { label: 'domina los enfrentamientos (matchups)', value: sign * coeffsUsed.matchup * breakdown.matchupEdge },
     { label: 'tiene mejor meta (win rate de héroes)', value: sign * coeffsUsed.meta * breakdown.metaEdge },
     { label: 'tiene mejor composición de equipo', value: sign * coeffsUsed.composition * breakdown.compEdge },
+    { label: 'tiene una curva de poder (early/mid/late) más favorable', value: sign * coeffsUsed.timing * breakdown.timingEdge },
   ];
   const summary = contributions
     .filter((c) => c.value > 0.02)

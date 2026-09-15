@@ -8,6 +8,7 @@ export interface ModelWeights {
   matchup: number;
   meta: number;
   composition: number;
+  timing: number;
   calibratedAt: string | null;
   samples: number;
 }

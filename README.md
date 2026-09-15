@@ -28,8 +28,11 @@ números sale.
   línea enemiga con el desglose por rival (Dota Plus es una caja negra).
 - **Planificador de baneos** (`/bans`): meta + amenaza a tu equipo + ban rate pro.
 - **Simulador de batalla de pickeos** (`/simulator`): estima la probabilidad de victoria
-  de draft A vs draft B (hot-seat), sin reproducir la partida. Los coeficientes se calibran
-  con resultados de partidas pro (`scripts/calibrate.ts`, `assets/weights.json`).
+  de draft A vs draft B (hot-seat), sin reproducir la partida, combinando 4 señales:
+  matchups, meta, composición y **timing (curva de poder early/mid/late)**. Los coeficientes
+  se calibran con resultados de partidas pro (`scripts/calibrate.ts`, `assets/weights.json`);
+  el de timing arranca en 0 (inerte) porque su dirección la decide la calibración, no una
+  intuición a mano.
 - **Informe educativo**: al cerrar una batalla explica *por qué* ganó un draft, fortalezas y
   debilidades de cada uno, y una idea de mejora (swap que sube la probabilidad del ganador).
 - **Arena de capitanes local** (`/arena`): draft por turnos estilo Captains Mode (pass-and-play,

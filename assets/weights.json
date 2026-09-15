@@ -3,7 +3,8 @@
   "matchup": 8,
   "meta": 6,
   "composition": 0.5,
+  "timing": 0,
   "calibratedAt": null,
   "samples": 0,
-  "note": "Pre-calibration defaults. Overwritten by scripts/calibrate.ts using real pro-match outcomes."
+  "note": "Pre-calibration defaults. Overwritten by scripts/calibrate.ts using real pro-match outcomes. `timing` starts at 0 (inert) because its direction is learned from data, not guessed."
 }
