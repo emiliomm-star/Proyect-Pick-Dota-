@@ -10,6 +10,7 @@ import type { HeroAttributes } from '../data/heroAttributes';
 import { modelWeights } from '../data/weights';
 import { counterAdvantage, heroWinrate, shrunkWinrate } from './recommend';
 import { teamProfile } from './composition';
+import { teamSynergy } from './synergy';
 
 export interface PredictCoeffs {
   intercept: number;
@@ -17,6 +18,7 @@ export interface PredictCoeffs {
   meta: number;
   composition: number;
   timing: number;
+  synergy: number;
 }
 
 export interface PredictOptions {
@@ -40,6 +42,14 @@ export interface DraftFeatures {
    * by calibration (scripts/calibrate.ts) from real match results.
    */
   timingEdge: number;
+  /**
+   * Radiant ally-synergy score minus dire's (-1..1). Each side's score is the
+   * fraction of pairwise synergy rules it satisfies (disable chains, save for
+   * a vulnerable core, multiple teamfight threats — see synergy.ts). Unlike
+   * timing, "more synergy" is a coherent, one-directional notion of team
+   * robustness, so it gets a small positive prior instead of starting inert.
+   */
+  synergyEdge: number;
 }
 
 export interface KeyMatchup {
@@ -69,7 +79,14 @@ export interface Prediction {
  * `timing` starts at 0 (inert) because, unlike the others, its direction isn't
  * a safe hand-picked guess — it's meant to be learned by calibration.
  */
-export const PREDICT_COEFFS: PredictCoeffs = { intercept: 0, matchup: 8, meta: 6, composition: 0.5, timing: 0 };
+export const PREDICT_COEFFS: PredictCoeffs = {
+  intercept: 0,
+  matchup: 8,
+  meta: 6,
+  composition: 0.5,
+  timing: 0,
+  synergy: 1,
+};
 
 function currentCoeffs(): PredictCoeffs {
   return {
@@ -78,6 +95,7 @@ function currentCoeffs(): PredictCoeffs {
     meta: modelWeights.meta ?? PREDICT_COEFFS.meta,
     composition: modelWeights.composition ?? PREDICT_COEFFS.composition,
     timing: modelWeights.timing ?? PREDICT_COEFFS.timing,
+    synergy: modelWeights.synergy ?? PREDICT_COEFFS.synergy,
   };
 }
 
@@ -117,6 +135,15 @@ function teamTimingLean(
   return avg(team.map((id) => POWER_SPIKE_SCORE[attributesFor(id).powerSpike]));
 }
 
+/** Team's ally-synergy score (0..1, see synergy.ts). */
+function teamSynergyScore(
+  team: number[],
+  attributesFor?: (heroId: number) => HeroAttributes,
+): number {
+  if (!attributesFor || team.length === 0) return 0;
+  return teamSynergy(team.map(attributesFor)).score;
+}
+
 /** Compute the raw feature vector (same features used to train the model). */
 export function draftFeatures(
   dataset: Dataset,
@@ -132,7 +159,9 @@ export function draftFeatures(
     compCoverage(radiant, options.attributesFor) - compCoverage(dire, options.attributesFor);
   const timingEdge =
     teamTimingLean(radiant, options.attributesFor) - teamTimingLean(dire, options.attributesFor);
-  return { matchupEdge, metaEdge, compEdge, timingEdge };
+  const synergyEdge =
+    teamSynergyScore(radiant, options.attributesFor) - teamSynergyScore(dire, options.attributesFor);
+  return { matchupEdge, metaEdge, compEdge, timingEdge, synergyEdge };
 }
 
 function keyMatchupsFor(dataset: Dataset, radiant: number[], dire: number[]): KeyMatchup[] {
@@ -170,7 +199,8 @@ export function predictDraft(
     coeffsUsed.matchup * features.matchupEdge +
     coeffsUsed.meta * features.metaEdge +
     coeffsUsed.composition * features.compEdge +
-    coeffsUsed.timing * features.timingEdge;
+    coeffsUsed.timing * features.timingEdge +
+    coeffsUsed.synergy * features.synergyEdge;
 
   const radiantWinProb = incomplete ? 0.5 : sigmoid(logit);
 

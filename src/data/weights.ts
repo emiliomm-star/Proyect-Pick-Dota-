@@ -9,6 +9,7 @@ export interface ModelWeights {
   meta: number;
   composition: number;
   timing: number;
+  synergy: number;
   calibratedAt: string | null;
   samples: number;
 }

@@ -9,6 +9,7 @@ import type { HeroAttributes } from '../data/heroAttributes';
 import { counterAdvantage } from './recommend';
 import { NEED_LABELS, teamProfile, type Need } from './composition';
 import { predictDraft, type KeyMatchup } from './predict';
+import { SYNERGY_LABELS, teamSynergy } from './synergy';
 
 export type SideId = 'radiant' | 'dire';
 
@@ -77,6 +78,13 @@ function sideStrengthsWeaknesses(
     if (magical === 0 && physical > 0) weaknesses.push('Todo daño físico: vulnerable a armadura.');
     if (physical === 0 && magical > 0) weaknesses.push('Todo daño mágico: vulnerable a BKB / resistencia mágica.');
     if (profile.counts.lateGame >= 3) weaknesses.push('Muy dependiente del late game: débil temprano.');
+
+    // Ally synergy: pairwise combos composition alone doesn't check.
+    const synergy = teamSynergy(team.map(attrsFor));
+    for (const [key, label] of Object.entries(SYNERGY_LABELS) as [keyof typeof SYNERGY_LABELS, string][]) {
+      if (synergy.breakdown[key]) strengths.push(label + '.');
+    }
+    if (synergy.score === 0) weaknesses.push('Sin combos claros entre aliados (sinergia baja).');
   }
 
   // Heroes on this side that are hard-countered by the enemy line-up.
@@ -184,6 +192,7 @@ export function draftReport(
     { label: 'tiene mejor meta (win rate de héroes)', value: sign * coeffsUsed.meta * breakdown.metaEdge },
     { label: 'tiene mejor composición de equipo', value: sign * coeffsUsed.composition * breakdown.compEdge },
     { label: 'tiene una curva de poder (early/mid/late) más favorable', value: sign * coeffsUsed.timing * breakdown.timingEdge },
+    { label: 'combina mejor entre sí (sinergia de aliados)', value: sign * coeffsUsed.synergy * breakdown.synergyEdge },
   ];
   const summary = contributions
     .filter((c) => c.value > 0.02)

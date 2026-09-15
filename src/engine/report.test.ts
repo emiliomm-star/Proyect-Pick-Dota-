@@ -67,6 +67,23 @@ describe('draftReport', () => {
     expect(report.dire.weaknesses.join(' ')).toContain('sufre');
   });
 
+  it('flags ally synergy as a strength when it applies', () => {
+    // Radiant [2, 3]: both have hardDisable=false/teamfight... let's craft a
+    // disable chain directly via a dedicated attrsFor.
+    const chainAttrs = (id: number): HeroAttributes => {
+      if (id === 1 || id === 2) return attr({ hardDisable: true });
+      return attr({});
+    };
+    const report = draftReport(makeDataset(), [1, 2], [3], { attributesFor: chainAttrs });
+    expect(report.radiant.strengths.some((s) => s.includes('encadenar controles'))).toBe(true);
+  });
+
+  it('flags no synergy as a weakness for a team with none of the rules', () => {
+    const flatAttrs = () => attr({});
+    const report = draftReport(makeDataset(), [1], [2], { attributesFor: flatAttrs });
+    expect(report.radiant.weaknesses.some((w) => w.includes('sinergia baja'))).toBe(true);
+  });
+
   it('suggests an improvement swap for the winner when one helps', () => {
     // Radiant is [1]; swapping in hero 3 (also beats 2, 60%) may or may not help,
     // but the search must run without error and return null or a valid swap.

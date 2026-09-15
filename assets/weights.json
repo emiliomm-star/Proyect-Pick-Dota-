@@ -4,7 +4,8 @@
   "meta": 6,
   "composition": 0.5,
   "timing": 0,
+  "synergy": 1,
   "calibratedAt": null,
   "samples": 0,
-  "note": "Pre-calibration defaults. Overwritten by scripts/calibrate.ts using real pro-match outcomes. `timing` starts at 0 (inert) because its direction is learned from data, not guessed."
+  "note": "Pre-calibration defaults. Overwritten by scripts/calibrate.ts using real pro-match outcomes. `timing` starts at 0 (inert, direction learned from data); `synergy` starts at 1 (mild prior — more ally synergy is monotonically a robustness signal, unlike timing's directionless early/late lean)."
 }

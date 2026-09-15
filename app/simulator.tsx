@@ -72,6 +72,7 @@ export default function SimulatorScreen() {
           <Factor label="Ventaja de matchups" value={prediction.breakdown.matchupEdge} />
           <Factor label="Meta (win rate)" value={prediction.breakdown.metaEdge} />
           <Factor label="Composición" value={prediction.breakdown.compEdge} />
+          <Factor label="Sinergia entre aliados" value={prediction.breakdown.synergyEdge} />
           <TimingFactor value={prediction.breakdown.timingEdge} />
         </View>
       )}

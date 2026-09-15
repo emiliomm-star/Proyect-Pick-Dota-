@@ -76,7 +76,7 @@ async function main() {
         if (radiant.length === 5 && dire.length === 5) {
           const f = draftFeatures(dataset, radiant, dire, { bracket: 'immortal', attributesFor: getAttributes });
           samples.push({
-            features: [f.matchupEdge, f.metaEdge, f.compEdge, f.timingEdge],
+            features: [f.matchupEdge, f.metaEdge, f.compEdge, f.timingEdge, f.synergyEdge],
             label: match.radiant_win ? 1 : 0,
           });
         }
@@ -103,10 +103,11 @@ async function main() {
     meta: fit.coeffs[1],
     composition: fit.coeffs[2],
     timing: fit.coeffs[3],
+    synergy: fit.coeffs[4],
     calibratedAt: new Date().toISOString(),
     samples: samples.length,
     trainAccuracy: Number(acc.toFixed(4)),
-    note: 'Fit on pro matches. compEdge/timingEdge are weak until heroAttributes covers the full roster.',
+    note: 'Fit on pro matches. compEdge/timingEdge/synergyEdge are weak until heroAttributes covers the full roster.',
   };
 
   const outFile = resolve(__dirname, '..', 'assets', 'weights.json');

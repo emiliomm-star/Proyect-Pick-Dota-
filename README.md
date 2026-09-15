@@ -28,11 +28,13 @@ números sale.
   línea enemiga con el desglose por rival (Dota Plus es una caja negra).
 - **Planificador de baneos** (`/bans`): meta + amenaza a tu equipo + ban rate pro.
 - **Simulador de batalla de pickeos** (`/simulator`): estima la probabilidad de victoria
-  de draft A vs draft B (hot-seat), sin reproducir la partida, combinando 4 señales:
-  matchups, meta, composición y **timing (curva de poder early/mid/late)**. Los coeficientes
+  de draft A vs draft B (hot-seat), sin reproducir la partida, combinando 5 señales:
+  matchups, meta, composición, **timing (curva de poder early/mid/late)** y **sinergia entre
+  aliados** (combos entre héroes *distintos*: cadenas de control, save para un core expuesto,
+  no depender de un solo héroe para pelear — ver `src/engine/synergy.ts`). Los coeficientes
   se calibran con resultados de partidas pro (`scripts/calibrate.ts`, `assets/weights.json`);
-  el de timing arranca en 0 (inerte) porque su dirección la decide la calibración, no una
-  intuición a mano.
+  el de timing arranca en 0 (inerte, dirección aprendida de los datos) y el de sinergia en 1
+  (prior leve: más sinergia es objetivamente más robustez).
 - **Informe educativo**: al cerrar una batalla explica *por qué* ganó un draft, fortalezas y
   debilidades de cada uno, y una idea de mejora (swap que sube la probabilidad del ganador).
 - **Arena de capitanes local** (`/arena`): draft por turnos estilo Captains Mode (pass-and-play,
@@ -50,7 +52,7 @@ números sale.
 | Items a craftear durante la partida | ✅ Datos reales | `itemPopularity.early/mid/late` |
 | Meta de profesionales | ✅ Agregado | `heroStats.pro_*` |
 | Items "para first blood" / "para runas" | ⚠️ No existe como dato | se muestran los items de inicio reales, sin etiquetar por propósito |
-| Sinergia con héroes aliados (dúos) | ⚠️ No hay endpoint directo | se aproxima por complementariedad de roles |
+| Sinergia con héroes aliados (dúos) | ⚠️ No hay endpoint directo | se aproxima con reglas de sinergia por atributos (`synergy.ts`: cadenas de control, save-para-core-expuesto, redundancia de amenazas), no con winrate real de dúos minado de partidas |
 | Texto de estrategias | ❌ No existe en la API | se decidió **no** inventar prosa; solo datos |
 
 ## Arquitectura

@@ -62,6 +62,11 @@ describe('predictDraft', () => {
     const p = predictDraft(makeDataset(), [1], [2]);
     expect(p.breakdown.timingEdge).toBe(0);
   });
+
+  it('synergyEdge is 0 without attributesFor', () => {
+    const p = predictDraft(makeDataset(), [1], [2]);
+    expect(p.breakdown.synergyEdge).toBe(0);
+  });
 });
 
 const attr = (powerSpike: HeroAttributes['powerSpike']): HeroAttributes => ({
@@ -96,5 +101,47 @@ describe('draftFeatures timingEdge', () => {
     const attrsFor = () => attr('mid');
     const f = draftFeatures(ds, [1], [2], { attributesFor: attrsFor });
     expect(f.timingEdge).toBe(0);
+  });
+});
+
+describe('draftFeatures synergyEdge', () => {
+  const ds = makeDataset();
+  const base = (o: Partial<HeroAttributes> = {}): HeroAttributes => ({
+    damageTypes: ['physical'],
+    hardDisable: false,
+    initiation: false,
+    teamfight: false,
+    waveclear: false,
+    sustain: false,
+    save: false,
+    escape: false,
+    powerSpike: 'mid',
+    durable: false,
+    ...o,
+  });
+
+  it('is positive when radiant has more synergy than dire', () => {
+    // Radiant [1, 10]: a saver (1) protecting a squishy ally (10) satisfies
+    // saveForVulnerableCore (1/3 rules -> 0.333). Dire [2, 20] has none.
+    const attrsFor = (id: number) => {
+      if (id === 1) return base({ save: true });
+      if (id === 10) return base({ escape: false, durable: false });
+      return base();
+    };
+    const f = draftFeatures(ds, [1, 10], [2, 20], { attributesFor: attrsFor });
+    expect(f.synergyEdge).toBeCloseTo(1 / 3, 5);
+  });
+
+  it('requires a DIFFERENT ally to be vulnerable, not the saver itself', () => {
+    // A lone saver who is also squishy doesn't count as synergy with itself.
+    const attrsFor = () => base({ save: true }); // escape:false, durable:false by default
+    const f = draftFeatures(ds, [1], [2], { attributesFor: attrsFor });
+    expect(f.synergyEdge).toBe(0);
+  });
+
+  it('is 0 when both teams share the same profile', () => {
+    const attrsFor = () => base({ save: true });
+    const f = draftFeatures(ds, [1], [2], { attributesFor: attrsFor });
+    expect(f.synergyEdge).toBe(0);
   });
 });
