@@ -86,7 +86,7 @@ export default function ArenaScreen() {
           </Text>
           <Text style={{ color: colors.accent, fontSize: 13, fontWeight: '600' }}>Toca para elegir héroe</Text>
           <View style={{ alignSelf: 'stretch', marginTop: spacing(2) }}>
-            <TurnTimer deadline={state.deadline} active onExpire={handleTimeout} />
+            <TurnTimer state={state} active onExpire={handleTimeout} />
           </View>
         </Pressable>
       )}

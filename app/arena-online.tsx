@@ -209,7 +209,7 @@ function OnlineArena() {
             {myTurn ? 'Tu turno — toca para elegir' : 'Esperando al rival…'}
           </Text>
           <View style={{ alignSelf: 'stretch', marginTop: spacing(2) }}>
-            <TurnTimer deadline={state.deadline} active={myTurn} onExpire={handleTimeout} />
+            <TurnTimer state={state} active={myTurn} onExpire={handleTimeout} />
           </View>
         </Pressable>
       )}

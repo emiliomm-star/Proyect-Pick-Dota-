@@ -6,6 +6,7 @@ import {
   initialCaptainsState,
   isComplete,
   remainingMs,
+  RESERVE_SECONDS,
   skipStep,
   STEP_SECONDS,
   usedHeroes,
@@ -41,13 +42,14 @@ describe('applyChoice', () => {
     expect(after).toBe(before); // no-op returns same reference
   });
 
-  it('sets a fresh deadline when advancing', () => {
+  it('restarts the step clock when advancing', () => {
     const t0 = 1_000_000;
     let state = initialCaptainsState(t0);
-    expect(state.deadline).toBe(t0 + STEP_SECONDS * 1000);
-    const t1 = t0 + 5000;
+    expect(state.stepStartedAt).toBe(t0);
+    const t1 = t0 + 5000; // within base time -> no reserve spent
     state = applyChoice(state, 10, t1);
-    expect(state.deadline).toBe(t1 + STEP_SECONDS * 1000);
+    expect(state.stepStartedAt).toBe(t1);
+    expect(state.radiantReserveMs).toBe(RESERVE_SECONDS * 1000);
   });
 
   it('completes after the full sequence with 5 picks per side', () => {
@@ -72,16 +74,37 @@ describe('skipStep', () => {
     expect(after.stepIndex).toBe(1);
     expect(after.radiantBans).toHaveLength(0);
     expect(after.radiantPicks).toHaveLength(0);
-    expect(after.deadline).toBe(1000 + STEP_SECONDS * 1000);
+    expect(after.stepStartedAt).toBe(1000);
   });
 });
 
-describe('remainingMs', () => {
-  it('counts down and never goes negative', () => {
-    const t0 = 1_000_000;
+describe('reserve time bank', () => {
+  const t0 = 1_000_000;
+
+  it('counts base + reserve as the hard deadline', () => {
     const state = initialCaptainsState(t0);
-    expect(remainingMs(state, t0)).toBe(STEP_SECONDS * 1000);
-    expect(remainingMs(state, t0 + 5000)).toBe(STEP_SECONDS * 1000 - 5000);
-    expect(remainingMs(state, t0 + 999_999)).toBe(0);
+    // base (30s) + reserve (130s) = 160s
+    expect(remainingMs(state, t0)).toBe((STEP_SECONDS + RESERVE_SECONDS) * 1000);
+  });
+
+  it('does not drain reserve if you act within base time', () => {
+    let state = initialCaptainsState(t0);
+    state = applyChoice(state, 10, t0 + 10_000); // 10s < 30s base
+    expect(state.radiantReserveMs).toBe(RESERVE_SECONDS * 1000);
+  });
+
+  it('drains reserve for time spent beyond base', () => {
+    let state = initialCaptainsState(t0);
+    // Radiant takes 50s: 30s base + 20s over -> 20s off the reserve.
+    state = applyChoice(state, 10, t0 + 50_000);
+    expect(state.radiantReserveMs).toBe(RESERVE_SECONDS * 1000 - 20_000);
+    expect(state.direReserveMs).toBe(RESERVE_SECONDS * 1000); // dire untouched
+  });
+
+  it('caps reserve at 0 and never negative', () => {
+    let state = initialCaptainsState(t0);
+    state = applyChoice(state, 10, t0 + 10_000_000); // way over
+    expect(state.radiantReserveMs).toBe(0);
+    expect(remainingMs(state, state.stepStartedAt)).toBeGreaterThan(0); // next team fresh
   });
 });
