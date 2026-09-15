@@ -1,13 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { colors, radius, spacing } from '../src/theme';
-import { getHero } from '../src/data/dataset';
+import { dataset, getHero } from '../src/data/dataset';
 import {
   applyChoice,
   CAPTAINS_SEQUENCE,
   currentStep,
   initialCaptainsState,
   isComplete,
+  skipStep,
   usedHeroes,
   type CaptainsState,
   type DraftTeam,
@@ -15,6 +16,14 @@ import {
 import { HeroImage } from '../src/components/HeroImage';
 import { HeroPicker } from '../src/components/HeroPicker';
 import { DraftReportView } from '../src/components/DraftReportView';
+import { TurnTimer } from '../src/components/TurnTimer';
+
+/** A random hero not yet used, for auto-pick when the timer runs out. */
+function randomAvailable(used: Set<number>): number | null {
+  const pool = dataset.heroes.filter((h) => !used.has(h.id));
+  if (pool.length === 0) return null;
+  return pool[Math.floor(Math.random() * pool.length)].id;
+}
 
 const teamColor = (t: DraftTeam) => (t === 'radiant' ? colors.ally : colors.enemy);
 const teamName = (t: DraftTeam) => (t === 'radiant' ? 'Radiant' : 'Dire');
@@ -32,6 +41,20 @@ export default function ArenaScreen() {
     setState((s) => applyChoice(s, heroId));
     setPickerOpen(false);
   };
+
+  // Timer ran out: auto-pick a random hero, or skip the ban.
+  const handleTimeout = useCallback(() => {
+    setState((s) => {
+      const cur = currentStep(s);
+      if (!cur) return s;
+      if (cur.action === 'pick') {
+        const id = randomAvailable(usedHeroes(s));
+        return id == null ? s : applyChoice(s, id);
+      }
+      return skipStep(s);
+    });
+    setPickerOpen(false);
+  }, []);
 
   return (
     <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing(4), gap: spacing(4) }}>
@@ -62,6 +85,9 @@ export default function ArenaScreen() {
             {teamName(step.team)} · {step.action === 'ban' ? 'BANEA' : 'PICKEA'}
           </Text>
           <Text style={{ color: colors.accent, fontSize: 13, fontWeight: '600' }}>Toca para elegir héroe</Text>
+          <View style={{ alignSelf: 'stretch', marginTop: spacing(2) }}>
+            <TurnTimer deadline={state.deadline} active onExpire={handleTimeout} />
+          </View>
         </Pressable>
       )}
 

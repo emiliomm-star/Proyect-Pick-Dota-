@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { colors, radius, spacing } from '../src/theme';
-import { getHero } from '../src/data/dataset';
+import { dataset, getHero } from '../src/data/dataset';
 import { isSupabaseConfigured } from '../src/lib/supabase';
 import {
   applyChoice,
   currentStep,
   isComplete,
+  skipStep,
   usedHeroes,
   CAPTAINS_SEQUENCE,
   type CaptainsState,
@@ -22,9 +23,16 @@ import {
 import { HeroImage } from '../src/components/HeroImage';
 import { HeroPicker } from '../src/components/HeroPicker';
 import { DraftReportView } from '../src/components/DraftReportView';
+import { TurnTimer } from '../src/components/TurnTimer';
 
 const teamColor = (t: DraftTeam) => (t === 'radiant' ? colors.ally : colors.enemy);
 const teamName = (t: DraftTeam) => (t === 'radiant' ? 'Radiant' : 'Dire');
+
+function randomAvailable(used: Set<number>): number | null {
+  const pool = dataset.heroes.filter((h) => !used.has(h.id));
+  if (pool.length === 0) return null;
+  return pool[Math.floor(Math.random() * pool.length)].id;
+}
 
 export default function ArenaOnlineScreen() {
   if (!isSupabaseConfigured) return <SetupInstructions />;
@@ -94,10 +102,9 @@ function OnlineArena() {
 
   const used = useMemo(() => (state ? usedHeroes(state) : new Set<number>()), [state]);
 
-  const choose = useCallback(
-    async (heroId: number) => {
-      if (!roomCode || !state) return;
-      const next = applyChoice(state, heroId);
+  const pushState = useCallback(
+    async (next: CaptainsState) => {
+      if (!roomCode) return;
       setState(next); // optimistic
       setPickerOpen(false);
       try {
@@ -106,8 +113,29 @@ function OnlineArena() {
         setError((e as Error).message);
       }
     },
-    [roomCode, state],
+    [roomCode],
   );
+
+  const choose = useCallback(
+    (heroId: number) => {
+      if (!state) return;
+      pushState(applyChoice(state, heroId));
+    },
+    [state, pushState],
+  );
+
+  // Only the client whose turn it is enforces the timeout.
+  const handleTimeout = useCallback(() => {
+    if (!state) return;
+    const cur = currentStep(state);
+    if (!cur) return;
+    if (cur.action === 'pick') {
+      const id = randomAvailable(usedHeroes(state));
+      if (id != null) pushState(applyChoice(state, id));
+    } else {
+      pushState(skipStep(state));
+    }
+  }, [state, pushState]);
 
   // Lobby
   if (!roomCode || !state || !myRole) {
@@ -180,6 +208,9 @@ function OnlineArena() {
           <Text style={{ color: colors.accent, fontSize: 13, fontWeight: '600' }}>
             {myTurn ? 'Tu turno — toca para elegir' : 'Esperando al rival…'}
           </Text>
+          <View style={{ alignSelf: 'stretch', marginTop: spacing(2) }}>
+            <TurnTimer deadline={state.deadline} active={myTurn} onExpire={handleTimeout} />
+          </View>
         </Pressable>
       )}
 
