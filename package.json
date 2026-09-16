@@ -41,7 +41,8 @@
     "@types/react": "~18.3.12",
     "tsx": "^4.19.2",
     "typescript": "~5.3.3",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "wrangler": "^4.132.0"
   },
   "private": true
 }

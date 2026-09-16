@@ -128,6 +128,29 @@ npm start                      # Expo (elige iOS / Android / web)
 > Las políticas RLS del esquema son abiertas (MVP). Antes de un lanzamiento público conviene
 > endurecerlas (auth por sala o validación de jugadas en una Edge Function).
 
+## Desplegar a Cloudflare Pages
+
+Las variables `EXPO_PUBLIC_*` (Supabase) se **incrustan al momento de exportar**, no al
+subir — así que el `.env` debe existir y estar completo *antes* de generar el build.
+
+```bash
+npm run deploy   # expo export --platform web + wrangler pages deploy dist
+```
+
+- La primera vez, `wrangler` te pedirá iniciar sesión en Cloudflare (se abre el navegador).
+- Cuando pregunte a qué proyecto de Pages subir, elige el **existente** (no crees uno
+  nuevo, o cambiaría la URL pública).
+- Repite `npm run deploy` cada vez que cambies código — no hay despliegue automático a
+  menos que conectes el repo a Cloudflare por Git.
+
+> Si acabas de crear/editar el `.env`, confirma que el export lo detectó: al principio
+> del log debe salir `env: load .env` y `env: export EXPO_PUBLIC_SUPABASE_URL
+> EXPO_PUBLIC_SUPABASE_ANON_KEY`. Si no sale, revisa que el archivo se llame exactamente
+> `.env` (Windows/Notepad a veces guarda `.env.txt`) y esté en la raíz del proyecto.
+>
+> Tras subir, si el sitio sigue mostrando la versión anterior, es casi siempre **caché
+> del navegador**: recarga forzada (`Ctrl+Shift+R`) o ábrelo en una ventana de incógnito.
+
 ## Telegram Mini App (opcional)
 
 La misma web puede abrirse **dentro de Telegram** como Mini App (identidad del usuario
