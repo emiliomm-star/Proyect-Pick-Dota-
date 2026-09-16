@@ -1,16 +1,25 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  FlatList,
   Modal,
   Pressable,
+  ScrollView,
   Text,
   TextInput,
   View,
 } from 'react-native';
-import { colors, radius, spacing } from '../theme';
+import { attrColors, attrLabels, colors, radius, spacing } from '../theme';
 import { heroesSorted } from '../data/dataset';
+import { filterAndRankHeroes } from '../data/heroSearch';
 import type { Hero } from '../data/types';
 import { HeroImage } from './HeroImage';
+
+const ATTR_ORDER: (keyof typeof attrLabels)[] = ['str', 'agi', 'int', 'all'];
+
+export interface PickedGroup {
+  label: string;
+  color: string;
+  heroIds: number[];
+}
 
 interface Props {
   visible: boolean;
@@ -21,17 +30,35 @@ interface Props {
   remaining: number;
   onSelect: (heroId: number) => void;
   onClose: () => void;
+  /**
+   * Already-picked/banned heroes, shown as a compact strip above the grid so
+   * captains can see the full draft state without closing the panel.
+   */
+  groups?: PickedGroup[];
 }
 
-export function HeroPicker({ visible, title, excluded, remaining, onSelect, onClose }: Props) {
+export function HeroPicker({ visible, title, excluded, remaining, onSelect, onClose, groups }: Props) {
   const [query, setQuery] = useState('');
 
-  const results = useMemo<Hero[]>(() => {
-    const q = query.trim().toLowerCase();
-    return heroesSorted.filter(
-      (h) => !excluded.has(h.id) && (q === '' || h.localizedName.toLowerCase().includes(q)),
+  const available = useMemo<Hero[]>(
+    () => heroesSorted.filter((h) => !excluded.has(h.id)),
+    [excluded],
+  );
+
+  const ranked = useMemo(() => filterAndRankHeroes(available, query), [available, query]);
+  const topMatchId = query.trim() !== '' && ranked.length > 0 ? ranked[0].id : null;
+
+  const sections = useMemo(() => {
+    const byAttr = new Map<string, Hero[]>();
+    for (const h of ranked) {
+      const list = byAttr.get(h.primaryAttr) ?? [];
+      list.push(h);
+      byAttr.set(h.primaryAttr, list);
+    }
+    return ATTR_ORDER.map((attr) => ({ attr, heroes: byAttr.get(attr) ?? [] })).filter(
+      (s) => s.heroes.length > 0,
     );
-  }, [query, excluded]);
+  }, [ranked]);
 
   // Auto-close once the target is full (e.g. all 5 enemy slots picked).
   useEffect(() => {
@@ -48,6 +75,8 @@ export function HeroPicker({ visible, title, excluded, remaining, onSelect, onCl
     setQuery(''); // keep the picker open for rapid multi-add
   };
 
+  const visibleGroups = groups?.filter((g) => g.heroIds.length > 0) ?? [];
+
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' }}>
@@ -58,7 +87,8 @@ export function HeroPicker({ visible, title, excluded, remaining, onSelect, onCl
             borderTopRightRadius: radius.lg,
             paddingTop: spacing(4),
             paddingHorizontal: spacing(4),
-            maxHeight: '82%',
+            maxHeight: '88%',
+            minHeight: '55%',
           }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -76,18 +106,17 @@ export function HeroPicker({ visible, title, excluded, remaining, onSelect, onCl
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Escribe y pulsa Enter…"
+            placeholder="Buscar héroe…"
             placeholderTextColor={colors.textMuted}
             autoCorrect={false}
             autoFocus
             blurOnSubmit={false}
             returnKeyType="search"
             onSubmitEditing={() => {
-              if (results.length > 0) pick(results[0].id);
+              if (topMatchId != null) pick(topMatchId);
             }}
             style={{
               marginTop: spacing(3),
-              marginBottom: spacing(2),
               backgroundColor: colors.surfaceAlt,
               color: colors.text,
               borderRadius: radius.md,
@@ -98,49 +127,84 @@ export function HeroPicker({ visible, title, excluded, remaining, onSelect, onCl
             }}
           />
 
-          <FlatList
-            data={results}
-            keyExtractor={(h) => String(h.id)}
-            keyboardShouldPersistTaps="handled"
-            numColumns={1}
-            contentContainerStyle={{ paddingBottom: spacing(8) }}
-            ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: colors.border }} />}
-            renderItem={({ item, index }) => {
-              const isFirst = index === 0 && query.trim() !== '';
-              return (
-                <Pressable
-                  onPress={() => pick(item.id)}
-                  style={({ pressed }) => ({
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingVertical: spacing(2),
-                    paddingHorizontal: isFirst ? spacing(2) : 0,
-                    borderRadius: radius.sm,
-                    backgroundColor: isFirst ? colors.surfaceAlt : 'transparent',
-                    opacity: pressed ? 0.6 : 1,
-                  })}
-                >
-                  <HeroImage heroId={item.id} size={54} />
-                  <View style={{ marginLeft: spacing(3), flex: 1 }}>
-                    <Text style={{ color: colors.text, fontSize: 15, fontWeight: '600' }}>
-                      {item.localizedName}
-                    </Text>
-                    <Text style={{ color: colors.textMuted, fontSize: 12 }}>
-                      {item.roles.slice(0, 3).join(' · ')}
-                    </Text>
+          {/* Already picked/banned — always visible, no need to close the panel. */}
+          {visibleGroups.length > 0 && (
+            <View
+              style={{
+                marginTop: spacing(3),
+                paddingBottom: spacing(2),
+                borderBottomWidth: 1,
+                borderBottomColor: colors.border,
+                gap: spacing(1.5),
+              }}
+            >
+              {visibleGroups.map((g) => (
+                <View key={g.label} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing(2) }}>
+                  <Text style={{ color: g.color, fontSize: 11, fontWeight: '700', width: 64 }}>
+                    {g.label}
+                  </Text>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4, flex: 1 }}>
+                    {g.heroIds.map((id) => (
+                      <HeroImage key={id} heroId={id} size={28} />
+                    ))}
                   </View>
-                  {isFirst && (
-                    <Text style={{ color: colors.accent, fontSize: 11, fontWeight: '700' }}>↵ Enter</Text>
-                  )}
-                </Pressable>
-              );
-            }}
-            ListEmptyComponent={
+                </View>
+              ))}
+            </View>
+          )}
+
+          <ScrollView
+            style={{ flex: 1, marginTop: spacing(2) }}
+            contentContainerStyle={{ paddingBottom: spacing(8) }}
+            keyboardShouldPersistTaps="handled"
+          >
+            {sections.length === 0 ? (
               <Text style={{ color: colors.textMuted, paddingVertical: spacing(6), textAlign: 'center' }}>
                 Sin resultados
               </Text>
-            }
-          />
+            ) : (
+              sections.map(({ attr, heroes }) => (
+                <View key={attr} style={{ marginBottom: spacing(3) }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: spacing(2) }}>
+                    <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: attrColors[attr] }} />
+                    <Text style={{ color: attrColors[attr], fontWeight: '700', fontSize: 12 }}>
+                      {attrLabels[attr]}
+                    </Text>
+                    <Text style={{ color: colors.textMuted, fontSize: 11 }}>({heroes.length})</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing(2) }}>
+                    {heroes.map((h) => {
+                      const isTop = h.id === topMatchId;
+                      return (
+                        <Pressable
+                          key={h.id}
+                          onPress={() => pick(h.id)}
+                          style={({ pressed }) => ({
+                            width: 72,
+                            alignItems: 'center',
+                            padding: 4,
+                            borderRadius: radius.sm,
+                            borderWidth: isTop ? 1 : 0,
+                            borderColor: colors.accent,
+                            backgroundColor: pressed ? colors.surfaceAlt : isTop ? 'rgba(194,60,42,0.12)' : 'transparent',
+                            opacity: pressed ? 0.7 : 1,
+                          })}
+                        >
+                          <HeroImage heroId={h.id} size={64} />
+                          <Text
+                            numberOfLines={1}
+                            style={{ color: colors.text, fontSize: 10, marginTop: 4, textAlign: 'center' }}
+                          >
+                            {h.localizedName}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
+                  </View>
+                </View>
+              ))
+            )}
+          </ScrollView>
         </View>
       </View>
     </Modal>

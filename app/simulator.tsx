@@ -128,6 +128,10 @@ export default function SimulatorScreen() {
         remaining={picker ? 5 - (picker === 'radiant' ? radiant.length : dire.length) : 0}
         onSelect={(id) => picker && add(picker, id)}
         onClose={() => setPicker(null)}
+        groups={[
+          { label: 'Radiant', color: colors.ally, heroIds: radiant },
+          { label: 'Dire', color: colors.enemy, heroIds: dire },
+        ]}
       />
     </ScrollView>
   );

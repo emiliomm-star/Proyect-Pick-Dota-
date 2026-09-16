@@ -192,6 +192,11 @@ export default function DraftScreen() {
           if (picker) addHero(picker, id);
         }}
         onClose={() => setPicker(null)}
+        groups={[
+          { label: TEAM_TITLES.myTeam, color: colors.ally, heroIds: myTeam },
+          { label: TEAM_TITLES.enemy, color: colors.enemy, heroIds: enemy },
+          { label: TEAM_TITLES.bans, color: colors.neutral, heroIds: bans },
+        ]}
       />
     </SafeAreaView>
   );

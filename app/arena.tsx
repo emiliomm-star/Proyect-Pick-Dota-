@@ -119,6 +119,11 @@ export default function ArenaScreen() {
         remaining={1}
         onSelect={choose}
         onClose={() => setPickerOpen(false)}
+        groups={[
+          { label: 'Radiant', color: colors.ally, heroIds: state.radiantPicks },
+          { label: 'Dire', color: colors.enemy, heroIds: state.direPicks },
+          { label: 'Baneos', color: colors.neutral, heroIds: [...state.radiantBans, ...state.direBans] },
+        ]}
       />
     </ScrollView>
   );

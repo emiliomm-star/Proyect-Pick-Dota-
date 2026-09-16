@@ -18,6 +18,21 @@ export const colors = {
 export const radius = { sm: 6, md: 10, lg: 14 } as const;
 export const spacing = (n: number) => n * 4;
 
+/** Colors/labels for the 4 primary-attribute sections of the hero grid (like Dota's own hero-select screen). */
+export const attrColors: Record<'str' | 'agi' | 'int' | 'all', string> = {
+  str: '#e0605c',
+  agi: '#4fbf6d',
+  int: '#4fa3e0',
+  all: '#c9a53b',
+};
+
+export const attrLabels: Record<'str' | 'agi' | 'int' | 'all', string> = {
+  str: 'Fuerza',
+  agi: 'Agilidad',
+  int: 'Inteligencia',
+  all: 'Universal',
+};
+
 export const roleColors: Record<string, string> = {
   Carry: '#e5a03d',
   Support: '#57a6e0',

@@ -11,6 +11,11 @@ números sale.
 ## Qué hace (MVP)
 
 - **Tablero de draft**: 5 slots para tu equipo, 5 para el enemigo y baneos.
+- **Selector de héroes tipo Dota**: panel agrupado por atributo (Fuerza / Agilidad /
+  Inteligencia / Universal), con búsqueda en vivo (prioriza prefijo del nombre, luego
+  prefijo de palabra, luego substring — `src/data/heroSearch.ts`) y una franja siempre
+  visible con lo ya pickeado/baneado, para no tener que cerrar el panel a mirar el
+  tablero. Mismo componente (`HeroPicker`) en el draft, la arena y el simulador.
 - **Recomendación de héroes** ordenada por una ventaja combinada de tres señales reales:
   - **Meta** — win rate del héroe en el bracket elegido (`/heroStats`).
   - **Counter** — qué tan bien enfrenta al equipo enemigo (`/heroes/{id}/matchups`).
