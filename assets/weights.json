@@ -1,11 +1,12 @@
 {
-  "intercept": 0,
-  "matchup": 8,
-  "meta": 6,
-  "composition": 0.5,
-  "timing": 0,
-  "synergy": 1,
-  "calibratedAt": null,
-  "samples": 0,
-  "note": "Pre-calibration defaults. Overwritten by scripts/calibrate.ts using real pro-match outcomes. `timing` starts at 0 (inert, direction learned from data); `synergy` starts at 1 (mild prior — more ally synergy is monotonically a robustness signal, unlike timing's directionless early/late lean)."
+  "intercept": -0.1185799139193668,
+  "matchup": 165.8861704299632,
+  "meta": 0,
+  "composition": -0.5831856675590893,
+  "timing": 0.5228314440458453,
+  "synergy": 0.45082156521678984,
+  "calibratedAt": "2026-09-21T13:50:37.609Z",
+  "samples": 366,
+  "trainAccuracy": 0.7022,
+  "note": "Fit on pro matches. compEdge/timingEdge/synergyEdge are weak until heroAttributes covers the full roster."
 }
