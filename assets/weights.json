@@ -1,12 +1,12 @@
 {
-  "intercept": -0.13627484726132105,
-  "matchup": 125.14725235407694,
+  "intercept": 0.1364550356684016,
+  "matchup": 39.10016835197543,
   "meta": 0,
-  "composition": 0.33275659081409625,
-  "timing": -1.026521236784381,
-  "synergy": -0.2996497965986184,
-  "calibratedAt": "2026-10-05T15:47:30.503Z",
-  "samples": 300,
-  "trainAccuracy": 0.6533,
+  "composition": 0.2647740838220253,
+  "timing": 1.5082782694360306,
+  "synergy": -0.28169693163554976,
+  "calibratedAt": "2026-10-12T16:41:13.614Z",
+  "samples": 327,
+  "trainAccuracy": 0.5535,
   "note": "Fit on pro matches. compEdge/timingEdge/synergyEdge are weak until heroAttributes covers the full roster."
 }
